@@ -1,0 +1,1987 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<meta name="description" content="Jinum · Number Fortune — 输入手机号最后 4 位，免费看 18 个方面各一句简版解读。Enter the last 4 digits of your phone number for a free one-line reading across 18 areas." />
+<meta property="og:title" content="Jinum · Number Fortune" />
+<meta property="og:description" content="你的号码，藏着什么。输入手机号最后 4 位，免费看 18 个方面简版解读。jinum.me" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://jinum.me/" />
+<link rel="icon" href="data:," />
+<title>Jinum · Number Fortune — 手机号测算</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Noto+Serif+SC:wght@500;700;900&family=Noto+Serif+JP:wght@500;700;900&family=Noto+Serif+KR:wght@500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    color-scheme: dark;
+    --bg:#120e09; --bg-deep:#0b0805;
+    --surface:#1f1912; --surface-alt:#292017; --surface-raised:#2e2418;
+    --text:#f6f0e2; --dim:#bcab8f; --faint:#8f8069;
+    --border:#3d3020; --border-soft:#2d2317;
+    --accent:#c9a86a; --accent-bright:#e8c988; --accent-deep:#9a7d43; --accent-ink:#171208;
+    --seal:#b23a2e; --seal-deep:#8c2b21; --good:#a8c686;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; color:var(--text);
+    font-family:"Noto Serif SC","Noto Serif JP","Noto Serif KR","Songti SC","STSong",serif;
+    background:
+      radial-gradient(ellipse 120% 50% at 50% -10%, rgba(201,168,106,.07), transparent 60%),
+      linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+    background-attachment:fixed; background-color:var(--bg-deep);
+    min-height:100vh;
+  }
+  ::selection{background:rgba(201,168,106,.35)}
+  button,[role="button"],select,summary,input:not([type="checkbox"],[type="radio"]){min-height:2.25rem}
+  button{font-family:inherit; cursor:pointer; background:none; border:none; color:inherit}
+  .font-display{font-family:"Cormorant Garamond","Noto Serif SC","Noto Serif JP","Noto Serif KR",serif; letter-spacing:.01em}
+
+  /* language switcher */
+  .langbar{display:flex; justify-content:center; padding:16px 16px 0}
+  .langbar nav{display:inline-flex; align-items:center; gap:4px; border-radius:999px; border:1px solid var(--border-soft); background:rgba(31,25,18,.72); padding:4px; box-shadow:0 10px 24px rgba(0,0,0,.35); backdrop-filter:blur(4px)}
+  .langbar button{border-radius:999px; padding:6px 14px; font-size:14px; color:var(--dim); transition:background .2s,color .2s; min-height:36px}
+  .langbar button[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,.3)}
+
+  .brandline{font-size:13px; letter-spacing:.28em; color:var(--accent); text-transform:uppercase}
+  .brandline .dot{color:var(--seal)}
+  .domainline{margin-top:6px; font-size:12px; letter-spacing:.18em; color:var(--faint)}
+
+  /* candle glow */
+  .candle-glow{background:
+    radial-gradient(ellipse 90% 42% at 50% -6%, rgba(201,168,106,.22), transparent 65%),
+    radial-gradient(ellipse 55% 26% at 50% -2%, rgba(255,190,90,.14), transparent 70%)}
+  .glow-orb{position:absolute; left:50%; top:-70px; width:340px; height:340px; transform:translateX(-50%); border-radius:9999px;
+    background:radial-gradient(circle, rgba(255,196,96,.20) 0%, rgba(232,163,61,.08) 45%, transparent 70%);
+    filter:blur(6px); pointer-events:none; animation:breathe 7s ease-in-out infinite}
+  @keyframes breathe{0%,100%{opacity:.65; transform:translateX(-50%) scale(1)}50%{opacity:1; transform:translateX(-50%) scale(1.07)}}
+  .flame-halo{position:relative; display:inline-flex}
+  .flame-halo::before{content:""; position:absolute; inset:-16px -22px; border-radius:9999px;
+    background:radial-gradient(ellipse at 50% 62%, rgba(255,190,90,.28), transparent 65%);
+    animation:breathe-plain 5.5s ease-in-out infinite; pointer-events:none}
+  @keyframes breathe-plain{0%,100%{opacity:.55; transform:scale(1)}50%{opacity:.95; transform:scale(1.08)}}
+  @keyframes flicker{0%,100%{opacity:.62; transform:scaleY(1) rotate(-.6deg)}30%{opacity:.95; transform:scaleY(1.07) rotate(.6deg)}55%{opacity:.74; transform:scaleY(.96) rotate(0deg)}78%{opacity:1; transform:scaleY(1.04) rotate(-.4deg)}}
+  .flame{transform-origin:50% 100%; animation:flicker 2.8s ease-in-out infinite; filter:drop-shadow(0 0 9px rgba(255,176,66,.45))}
+
+  /* number sphere */
+  .number-sphere-wrap{position:absolute; left:50%; top:47%; transform:translate(-50%,-50%); width:min(86vw,410px); aspect-ratio:1/1; opacity:.6; pointer-events:none}
+  .number-sphere-wrap canvas{display:block; width:100%; height:100%}
+
+  /* dust motes */
+  .motes{position:absolute; inset:0; overflow:hidden; pointer-events:none}
+  .mote{position:absolute; border-radius:9999px; background:radial-gradient(circle, rgba(246,220,160,.85), rgba(246,220,160,0) 70%); animation:drift linear infinite; opacity:0}
+  @keyframes drift{0%{transform:translate3d(0,0,0); opacity:0}12%{opacity:.55}55%{opacity:.35}100%{transform:translate3d(14px,-150px,0); opacity:0}}
+
+  /* gate */
+  .gate-stage{position:relative; display:flex; flex-direction:column; align-items:center; overflow:hidden; padding:40px 24px 64px; text-align:center; min-height:82vh; transition:opacity .38s ease, transform .38s ease, filter .38s ease}
+  .gate-leaving{opacity:0; transform:translateY(18px) scale(.985); filter:blur(3px); pointer-events:none}
+  .gate-heroes{position:relative; margin-top:36px; display:flex; flex-direction:column; gap:20px}
+  .gate-heroes h1{margin:0; line-height:1.35; font-weight:500; font-size:18px; color:var(--faint)}
+  .gate-heroes h1.current{font-size:36px; font-weight:900; color:var(--text); text-shadow:0 2px 24px rgba(201,168,106,.35)}
+  .bell-btn{position:relative; margin-top:-4px; display:flex; flex-direction:column; align-items:center; touch-action:none; padding:8px 24px}
+  .bell-ring{position:absolute; top:12px; width:96px; height:96px; border-radius:9999px; border:1px solid rgba(201,168,106,.4); animation:ring-pulse 5.2s ease-in-out infinite}
+  @keyframes ring-pulse{0%,100%{opacity:.35; transform:scale(1)}50%{opacity:.7; transform:scale(1.05)}}
+  .bell-sway{transform-origin:50% -6px; animation:sway 5.2s ease-in-out infinite; filter:drop-shadow(0 6px 16px rgba(201,168,106,.35))}
+  @keyframes sway{0%,100%{transform:rotate(-2.4deg)}50%{transform:rotate(2.4deg)}}
+  .bell-stem{width:1px; height:56px; background:linear-gradient(180deg, transparent, var(--accent))}
+  .gate-hint{margin-top:12px; font-size:16px; font-weight:700; letter-spacing:.2em; color:var(--accent)}
+  .gate-note{position:relative; margin-top:40px; max-width:24rem; font-size:12px; line-height:1.7; color:var(--faint)}
+
+  .ornament{display:flex; align-items:center; gap:10px}
+  .ornament-line{height:1px; width:40px; background:linear-gradient(90deg, transparent, rgba(201,168,106,.55), transparent)}
+  .ornament-line.flex{flex:1; width:auto}
+  .ornament-diamond{width:7px; height:7px; transform:rotate(45deg); background:var(--accent); box-shadow:0 0 8px rgba(201,168,106,.6); flex-shrink:0}
+
+  /* flow header */
+  .flow-head{position:relative; overflow:hidden; padding:24px 20px 32px}
+  .flow-inner{position:relative; max-width:36rem; margin:0 auto; display:flex; flex-direction:column; align-items:center; text-align:center}
+  .flow-inner h1{margin:12px 0 0; font-size:26px; font-weight:900; line-height:1.4; text-shadow:0 2px 20px rgba(201,168,106,.3)}
+  .intro{margin:12px 0 0; max-width:28rem; font-size:14px; line-height:1.75; color:var(--dim)}
+  .digits{display:flex; align-items:flex-end; gap:10px; margin-top:24px}
+  .digit-box{width:56px; height:68px; border-radius:12px; border:1px solid var(--border); text-align:center;
+    font-family:"Cormorant Garamond","Noto Serif SC",serif; font-size:32px; font-weight:700; color:var(--text);
+    caret-color:var(--accent); background:linear-gradient(180deg, var(--surface-alt), var(--surface));
+    box-shadow:inset 0 2px 6px rgba(0,0,0,.4), 0 4px 12px rgba(0,0,0,.25);
+    transition:border-color .2s, box-shadow .2s, transform .15s}
+  @media(min-width:640px){.digit-box{width:60px}}
+  .digit-box:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(201,168,106,.25), 0 0 18px rgba(201,168,106,.18); outline:none; transform:translateY(-2px)}
+  .digit-box.filled{border-color:rgba(201,168,106,.65); color:var(--accent-bright); box-shadow:inset 0 2px 6px rgba(0,0,0,.35), 0 0 14px rgba(201,168,106,.14)}
+  .year-row{margin-top:20px; display:flex; align-items:center; gap:12px}
+  .year-row .lbl{font-size:14px; color:var(--dim)}
+  .year-toggle{display:flex; overflow:hidden; border-radius:999px; border:1px solid var(--border); box-shadow:inset 0 2px 6px rgba(0,0,0,.3)}
+  .year-toggle button{padding:6px 16px; font-size:14px; font-weight:500; background:var(--surface); color:var(--dim); min-height:36px}
+  .year-toggle button[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); font-weight:700}
+  .btn-primary{background:linear-gradient(180deg, var(--accent-bright) 0%, var(--accent) 55%, var(--accent-deep) 130%);
+    box-shadow:0 10px 24px rgba(154,125,67,.35), inset 0 1px 0 rgba(255,246,220,.55);
+    transition:transform .18s, opacity .18s; color:var(--accent-ink)}
+  .btn-primary:not(:disabled):active{transform:scale(.98)}
+  .btn-primary:disabled{opacity:.4; cursor:default}
+  .btn-begin{margin-top:24px; width:100%; max-width:24rem; border-radius:999px; padding:14px 24px; font-size:18px; font-weight:700}
+  .fill-hint{margin-top:8px; font-size:12px; color:var(--faint)}
+  .err-msg{margin-top:12px; font-size:14px; color:#e88a7a}
+  .only-note{margin-top:16px; max-width:28rem; font-size:12px; line-height:1.7; color:var(--faint)}
+
+  /* slogan block — before the number input */
+  .intro-block{margin-top:28px; width:100%; max-width:32rem; text-align:center; border:1px solid var(--border);
+    background:linear-gradient(180deg, var(--surface-raised) 0%, var(--surface) 60%);
+    box-shadow:0 10px 28px rgba(0,0,0,.35), inset 0 1px 0 rgba(246,240,226,.05); border-radius:16px; padding:22px 20px}
+  @media(min-width:640px){.intro-block{padding:26px 24px}}
+  .slogan-main{margin:14px 0 0; font-size:23px; font-weight:900; line-height:1.55; color:var(--accent-bright);
+    text-shadow:0 2px 18px rgba(201,168,106,.30); letter-spacing:.02em}
+  @media(min-width:640px){.slogan-main{font-size:25px}}
+  .slogan-sub{margin:10px 0 0; font-size:15px; line-height:1.75; color:var(--dim)}
+
+  .loader{margin-top:28px; display:flex; flex-direction:column; align-items:center}
+  .loader-orb{position:relative; width:64px; height:64px; display:flex; align-items:center; justify-content:center}
+  .loader-ring{position:absolute; inset:0; border-radius:9999px; border:1px solid rgba(201,168,106,.55); animation:ring-expand 1.8s ease-out infinite}
+  @keyframes ring-expand{0%{transform:scale(.55); opacity:.8}100%{transform:scale(1.6); opacity:0}}
+  .shimmer-track{position:relative; overflow:hidden; height:14px; border-radius:999px; background:var(--surface-alt)}
+  .shimmer-track::after{content:""; position:absolute; inset:0; width:45%; background:linear-gradient(90deg, transparent, rgba(232,201,136,.13), transparent); animation:shimmer-slide 1.6s ease-in-out infinite}
+  @keyframes shimmer-slide{from{transform:translateX(-100%)}to{transform:translateX(240%)}}
+
+  /* results */
+  main.results{max-width:36rem; margin:0 auto; padding:0 20px 40px; scroll-margin-top:16px}
+  .card{background:linear-gradient(180deg, var(--surface-raised) 0%, var(--surface) 55%); border:1px solid var(--border);
+    box-shadow:0 10px 28px rgba(0,0,0,.35), inset 0 1px 0 rgba(246,240,226,.05); border-radius:16px; padding:20px}
+  @media(min-width:640px){.card{padding:24px}}
+  .verdict-card{background:radial-gradient(ellipse 80% 60% at 18% 0%, rgba(201,168,106,.12), transparent 60%), linear-gradient(180deg, var(--surface-raised) 0%, var(--surface) 60%);
+    border:1px solid var(--border); box-shadow:0 12px 30px rgba(0,0,0,.38), inset 0 1px 0 rgba(246,240,226,.06); border-radius:16px; padding:20px}
+  @media(min-width:640px){.verdict-card{padding:24px}}
+  .verdict-flex{display:flex; align-items:flex-start; gap:16px}
+  .seal-badge{display:inline-flex; min-height:64px; min-width:64px; flex-shrink:0; transform:rotate(3deg); align-items:center; justify-content:center;
+    border-radius:8px; padding:8px; text-align:center; font-size:16px; font-weight:900; line-height:1.3; color:#f5efe3; background:var(--seal);
+    box-shadow:0 8px 20px rgba(0,0,0,.45), inset 0 0 0 1.5px rgba(246,240,226,.22), inset 0 0 14px rgba(0,0,0,.25)}
+  .seal-badge.bad{background:#6e4a2f}
+  .verdict-kicker{font-size:12px; letter-spacing:.15em; color:var(--faint); margin:0}
+  .verdict-phrase{margin:4px 0 0; font-size:24px; font-weight:700; line-height:1.4}
+  .verdict-summary{margin:8px 0 0; font-size:14px; line-height:1.75; color:var(--dim)}
+
+  .bundle-card{margin-top:20px; border:1px solid transparent; border-radius:16px; padding:20px;
+    background:linear-gradient(180deg, #322619 0%, var(--surface-alt) 60%) padding-box, linear-gradient(160deg, var(--accent-bright), var(--accent-deep) 55%, rgba(178,58,46,.65)) border-box;
+    box-shadow:0 14px 34px rgba(0,0,0,.4), 0 0 0 1px rgba(201,168,106,.08), 0 0 34px rgba(201,168,106,.10)}
+  @media(min-width:640px){.bundle-card{padding:24px}}
+  .bundle-head{display:flex; align-items:center; gap:12px}
+  .bundle-head h3{margin:0; font-size:20px; font-weight:700}
+  .bundle-desc{margin:8px 0 0; font-size:14px; line-height:1.75; color:var(--dim)}
+  .bundle-inc{margin:4px 0 0; font-size:12px; color:var(--faint)}
+  .bundle-price{margin:12px 0 0; font-size:24px; font-weight:900; color:var(--accent); line-height:1.4}
+  .btn-seal{background:linear-gradient(180deg, #c44a3a 0%, var(--seal) 55%, var(--seal-deep) 130%);
+    box-shadow:0 10px 22px rgba(140,43,33,.38), inset 0 1px 0 rgba(255,226,214,.35); transition:transform .18s; color:#fff}
+  .btn-seal:active{transform:scale(.98)}
+  .btn-bundle{margin-top:12px; width:100%; border-radius:999px; padding:12px 20px; font-size:16px; font-weight:700; min-height:48px}
+
+  .section-head{margin-top:32px; display:flex; align-items:center; gap:12px}
+  .section-head h3{margin:0; font-size:20px; font-weight:700}
+  .aspects{margin-top:12px; display:flex; flex-direction:column; gap:12px}
+  .aspect-head{display:flex; align-items:center; justify-content:space-between; gap:12px}
+  .aspect-head h4{margin:0; display:flex; align-items:baseline; gap:10px; font-size:18px; font-weight:700}
+  .aspect-num{font-size:14px; font-weight:600; letter-spacing:.08em; color:var(--accent-deep)}
+  .aspect-num.seal-num{color:var(--seal)}
+  .tag{flex-shrink:0; border-radius:999px; padding:4px 10px; font-size:12px; font-weight:500; border:1px solid var(--border); color:var(--dim)}
+  .brief{margin:6px 0 0; font-size:14px; line-height:1.75}
+  .ln-note{margin:8px 0 0; font-size:12px; color:var(--faint); line-height:1.7}
+  .btn-ghost-gold{border:1px solid var(--accent); color:var(--accent); border-radius:999px; padding:8px 16px; font-size:14px; font-weight:500; margin-top:12px; min-height:40px; transition:background .2s, transform .18s}
+  .btn-ghost-gold:active{transform:scale(.98)}
+  @media(hover:hover){.btn-ghost-gold:hover{background:rgba(201,168,106,.10)} .card-hover{transition:transform .25s, border-color .25s, box-shadow .25s} .card-hover:hover{transform:translateY(-2px); border-color:rgba(201,168,106,.55)}}
+  .ln-diamond{width:8px; height:8px; flex-shrink:0; transform:rotate(45deg); background:var(--seal); box-shadow:0 0 8px rgba(178,58,46,.7); align-self:center}
+
+  /* coming-soon notice (replaces any payment panel) */
+  .notice{margin-top:12px; border-radius:12px; border:1px solid var(--border); background:rgba(11,8,5,.45); padding:16px; animation:fade-up .35s cubic-bezier(.22,.8,.32,1) both}
+  .notice h5{margin:0; font-size:15px; font-weight:700; color:var(--accent)}
+  .notice p{margin:6px 0 0; font-size:13px; line-height:1.75; color:var(--dim)}
+  .notice .price-line{color:var(--text); font-weight:700}
+  .btn-close{margin-top:12px; border:1px solid var(--border); color:var(--dim); border-radius:999px; padding:8px 18px; font-size:14px; min-height:40px}
+
+  .paid-banner{margin-bottom:16px; border:1px solid rgba(168,198,134,.5); background:rgba(168,198,134,.08); color:var(--text); border-radius:12px; padding:14px 16px; font-size:14px; line-height:1.7}
+  .recover-input{width:100%; margin-top:10px; border-radius:12px; border:1px solid var(--border); padding:12px 14px; font-size:18px; letter-spacing:.35em; text-align:center; font-family:inherit; color:var(--text); background:linear-gradient(180deg, var(--surface-alt), var(--surface)); box-shadow:inset 0 2px 6px rgba(0,0,0,.35); color-scheme:dark}
+  .recover-input:focus, .recover-select:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(201,168,106,.25); outline:none}
+  .recover-select{width:100%; margin-top:10px; border-radius:12px; border:1px solid var(--border); padding:12px 14px; font-size:16px; font-family:inherit; color:var(--text); background:linear-gradient(180deg, var(--surface-alt), var(--surface)); color-scheme:dark}
+  .recover-label{display:block; margin-top:14px; font-size:13px; font-weight:700; color:var(--dim)}
+  .recover-btn{margin-top:16px; width:100%; border-radius:999px; padding:12px 20px; font-size:16px; font-weight:700; min-height:48px}
+  .recover-err{margin-top:10px; font-size:13px; color:#e88a7a}
+  .paywait{position:fixed; left:50%; bottom:calc(14px + env(safe-area-inset-bottom)); transform:translateX(-50%); z-index:60; width:min(92vw,26rem);
+    border:1px solid rgba(201,168,106,.65); border-radius:16px; padding:16px; text-align:left;
+    background:linear-gradient(180deg, #322619 0%, var(--surface) 70%); box-shadow:0 18px 44px rgba(0,0,0,.6), 0 0 30px rgba(201,168,106,.18)}
+  .paywait h5{margin:0; font-size:16px; font-weight:700; color:var(--accent-bright)}
+  .paywait p{margin:6px 0 0; font-size:13px; line-height:1.75; color:var(--dim)}
+  .paywait .recover-btn{margin-top:12px}
+  .paywait.flash{animation:paid-pulse 1.4s ease-in-out 2}
+  .paywait-dismiss{margin-top:8px; width:100%; font-size:13px; color:var(--faint); min-height:36px}
+  .tag.open{border-color:rgba(168,198,134,.55); color:var(--good)}
+  .detail-text{margin-top:10px; font-size:14px; line-height:1.85; color:var(--text)}
+  .detail-text p{margin:0 0 8px}
+  .detail-text .ln-sec-h{margin:12px 0 2px; font-weight:700; color:var(--accent); font-size:13px; letter-spacing:.08em}
+  .btn-new{margin-top:24px; width:100%; border-radius:999px; border:1px solid var(--border); padding:12px 20px; font-size:14px; color:var(--dim); min-height:48px}
+
+  /* change-number service */
+  .svc-wrap{max-width:36rem; margin:0 auto; padding:0 20px}
+  .svc-card{margin-top:24px; border:1px solid transparent; border-radius:16px; padding:20px;
+    background:linear-gradient(180deg, #2c2115 0%, var(--surface) 60%) padding-box, linear-gradient(160deg, var(--accent-bright), var(--accent-deep) 55%, rgba(178,58,46,.65)) border-box;
+    box-shadow:0 14px 34px rgba(0,0,0,.4), 0 0 34px rgba(201,168,106,.10)}
+  @media(min-width:640px){.svc-card{padding:24px}}
+  .svc-head{display:flex; align-items:center; gap:12px}
+  .svc-head h3{margin:0; font-size:20px; font-weight:700}
+  .svc-new{flex-shrink:0; border-radius:999px; padding:4px 10px; font-size:12px; font-weight:700; color:#fff; background:linear-gradient(180deg, #c44a3a, var(--seal-deep))}
+  .svc-desc{margin:10px 0 0; font-size:14px; line-height:1.75; color:var(--dim)}
+  .svc-price{margin:12px 0 0; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap}
+  .svc-price .amt{font-size:28px; font-weight:900; color:var(--accent); line-height:1.2}
+  .svc-price .note{font-size:12px; color:var(--faint)}
+  .svc-sub{margin:20px 0 0; font-size:14px; font-weight:700; color:var(--accent)}
+  .svc-needs{margin:8px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:6px}
+  .svc-needs li{display:flex; gap:8px; font-size:13px; line-height:1.7; color:var(--dim)}
+  .svc-needs li::before{content:""; margin-top:8px; width:6px; height:6px; flex-shrink:0; transform:rotate(45deg); background:var(--accent-deep)}
+  .svc-delivery{margin:12px 0 0; font-size:14px; line-height:1.75; color:var(--text); font-weight:700}
+  .svc-nopromise{margin:6px 0 0; font-size:12px; line-height:1.7; color:var(--faint)}
+  .svc-form{margin-top:16px; display:flex; flex-direction:column; gap:14px}
+  .svc-field label{display:block; font-size:13px; font-weight:700; color:var(--dim); margin-bottom:6px}
+  .svc-input{width:100%; border-radius:12px; border:1px solid var(--border); padding:12px 14px; font-size:16px; font-family:inherit; color:var(--text);
+    background:linear-gradient(180deg, var(--surface-alt), var(--surface)); box-shadow:inset 0 2px 6px rgba(0,0,0,.35); color-scheme:dark}
+  .svc-input:focus{border-color:var(--accent); box-shadow:0 0 0 3px rgba(201,168,106,.25); outline:none}
+  .svc-toggle{display:flex; overflow:hidden; border-radius:999px; border:1px solid var(--border); box-shadow:inset 0 2px 6px rgba(0,0,0,.3)}
+  .svc-toggle button{flex:1; padding:8px 10px; font-size:14px; font-weight:500; background:var(--surface); color:var(--dim); min-height:40px}
+  .svc-toggle button[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); font-weight:700}
+  .btn-svc{width:100%; border-radius:999px; padding:12px 20px; font-size:16px; font-weight:700; min-height:48px}
+
+  footer.rules{max-width:36rem; margin:0 auto; padding:0 20px 40px}
+  footer.rules .inner{margin-top:16px; font-size:12px; line-height:1.8; color:var(--faint)}
+  footer.rules h2{margin:0; text-align:center; font-size:14px; font-weight:700; letter-spacing:.15em; color:var(--dim)}
+  footer.rules .disclaimer{margin:12px 0 0; text-align:center}
+  footer.rules ul{margin:12px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px}
+  footer.rules li{display:flex; gap:8px}
+  footer.rules li::before{content:""; margin-top:8px; width:6px; height:6px; flex-shrink:0; transform:rotate(45deg); background:var(--accent-deep)}
+
+  @keyframes fade-up{from{opacity:0; transform:translateY(14px)}to{opacity:1; transform:translateY(0)}}
+  .reveal{opacity:0; animation:fade-up .6s cubic-bezier(.22,.8,.32,1) forwards}
+  .fade-in{animation:fade-in-k .5s ease-out both}
+  @keyframes fade-in-k{from{opacity:0}to{opacity:1}}
+  .flow-enter{animation:fade-up .55s cubic-bezier(.22,.8,.32,1) both}
+  .hidden{display:none !important}
+
+  /* sacred geometry background — reading page only, behind all content */
+  .langbar{position:relative; z-index:2}
+  #flow{position:relative; isolation:isolate}
+  #flow>header,#flow>main,#flow>.svc-wrap,#flow>footer{position:relative; z-index:1}
+  .sacred-bg{position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none;
+    background:
+      radial-gradient(ellipse 110% 55% at 50% -8%, rgba(255,255,255,.025), transparent 60%),
+      linear-gradient(180deg, #030302 0%, #070503 55%, #030302 100%)}
+  .geo-pos{position:absolute; pointer-events:none}
+  .geo-pos-main{left:50%; top:330px; width:min(150vw,920px); aspect-ratio:1/1; transform:translate(-50%,-50%)}
+  .geo-pos-orbits{left:50%; top:330px; width:min(170vw,1060px); aspect-ratio:1/1; transform:translate(-50%,-50%)}
+  .geo-pos-star{right:-18vw; top:980px; width:min(96vw,520px); aspect-ratio:1/1; transform:translateY(-50%)}
+  @media(min-width:640px){.geo-pos-star{right:-110px; top:1080px}}
+  .geo-pos-low{left:-20vw; top:1720px; width:min(90vw,480px); aspect-ratio:1/1; transform:translateY(-50%)}
+  @media(min-width:640px){.geo-pos-low{left:-100px}}
+  .geo-breathe{width:100%; height:100%; animation:geo-breathe 16s ease-in-out infinite}
+  .geo-breathe-slow{width:100%; height:100%; animation:geo-breathe 22s ease-in-out infinite; animation-delay:-8s}
+  @keyframes geo-breathe{0%,100%{opacity:.55; transform:scale(1)}50%{opacity:.95; transform:scale(1.045)}}
+  .geo-spin{display:block; width:100%; height:100%; animation:geo-spin 240s linear infinite; will-change:transform}
+  .geo-spin-rev{display:block; width:100%; height:100%; animation:geo-spin-rev 300s linear infinite; will-change:transform}
+  .geo-spin-slow{display:block; width:100%; height:100%; animation:geo-spin 360s linear infinite; will-change:transform}
+  @keyframes geo-spin{to{transform:rotate(360deg)}}
+  @keyframes geo-spin-rev{to{transform:rotate(-360deg)}}
+  .sacred-bg svg{overflow:visible}
+  .sacred-bg .wline{fill:none; stroke:#fff; stroke-width:.7}
+  .sacred-bg .wline-thin{fill:none; stroke:#fff; stroke-width:.45}
+  .sacred-bg .wdot{fill:#fff; stroke:none}
+  .geo-symbols{position:absolute; inset:0; color:#fff; font-family:"Cormorant Garamond",serif; animation:geo-sym-fade 18s ease-in-out infinite}
+  @keyframes geo-sym-fade{0%,100%{opacity:.35}50%{opacity:.8}}
+  .geo-symbols span{position:absolute; line-height:1; opacity:.55}
+  .geo-symbols .s-lg{font-size:30px}
+  .geo-symbols .s-md{font-size:21px}
+  .geo-symbols .s-sm{font-size:15px}
+
+  main.results .card, main.results .bundle-card{scroll-margin-top:24px; scroll-margin-bottom:24px}
+  @keyframes paid-pulse{0%,100%{box-shadow:0 0 0 3px rgba(201,168,106,.35), 0 0 26px rgba(201,168,106,.28)}50%{box-shadow:0 0 0 6px rgba(201,168,106,.55), 0 0 44px rgba(201,168,106,.45)}}
+  .paid-highlight{outline:2px solid var(--accent-bright); outline-offset:2px; animation:paid-pulse 1.6s ease-in-out 3}
+  @media (prefers-reduced-motion: reduce){
+    .flame,.glow-orb,.flame-halo::before,.mote,.bell-sway,.bell-ring,.loader-ring,.shimmer-track::after{animation:none}
+    .mote{display:none}
+    .reveal,.fade-in,.flow-enter,.notice{animation:none; opacity:1}
+    .gate-stage{transition:none}
+    .geo-breathe,.geo-breathe-slow,.geo-spin,.geo-spin-rev,.geo-spin-slow,.geo-symbols{animation:none}
+    .geo-breathe,.geo-breathe-slow{opacity:.5}
+    .geo-symbols{opacity:.3}
+  }
+</style>
+</head>
+<body>
+
+<div class="langbar">
+  <nav aria-label="Language" id="langNav"></nav>
+</div>
+
+<!-- ============ Ritual gate ============ -->
+<main id="gate" class="gate-stage candle-glow">
+  <div class="glow-orb" aria-hidden="true"></div>
+  <div class="number-sphere-wrap" aria-hidden="true"><canvas id="sphere"></canvas></div>
+  <div class="motes" id="gateMotes" aria-hidden="true"></div>
+
+  <p class="brandline font-display" style="position:relative">Jinum <span class="dot">·</span> Number Fortune</p>
+  <p class="domainline font-display" style="position:relative">jinum.me</p>
+
+  <span class="flame-halo" style="margin-top:26px" id="gateFlame"></span>
+
+  <div class="gate-heroes font-display" id="gateHeroes"></div>
+
+  <div class="ornament" style="position:relative; margin-top:40px" aria-hidden="true">
+    <span class="ornament-line"></span><span class="ornament-diamond"></span><span class="ornament-line"></span>
+  </div>
+
+  <div style="position:relative; display:flex; flex-direction:column; align-items:center" aria-hidden="true">
+    <div class="bell-stem"></div>
+  </div>
+  <button type="button" class="bell-btn" id="bellBtn">
+    <span class="bell-ring" aria-hidden="true"></span>
+    <svg width="64" height="76" viewBox="0 0 64 76" aria-hidden="true" class="bell-sway" style="position:relative">
+      <circle cx="32" cy="8" r="5" fill="none" stroke="#c9a86a" stroke-width="2.5"/>
+      <path d="M32 13 L32 20" stroke="#c9a86a" stroke-width="2.5"/>
+      <path d="M18 44 C18 30 24 20 32 20 C40 20 46 30 46 44 L50 54 L14 54 Z" fill="#8a6d3b" stroke="#c9a86a" stroke-width="1.6"/>
+      <rect x="12" y="54" width="40" height="5" rx="2.5" fill="#c9a86a"/>
+      <circle cx="32" cy="66" r="4" fill="#b23a2e"/>
+      <path d="M32 58 L32 62" stroke="#b23a2e" stroke-width="2.5"/>
+    </svg>
+    <span class="gate-hint font-display" id="gateHint"></span>
+  </button>
+  <p class="gate-note" id="gateNote"></p>
+</main>
+
+<!-- ============ Reading flow ============ -->
+<div id="flow" class="hidden">
+  <!-- Sacred geometry background (code-drawn, very faint, behind content) -->
+  <div class="sacred-bg" aria-hidden="true">
+    <!-- Metatron's cube -->
+    <div class="geo-pos geo-pos-main" style="opacity:.075">
+      <div class="geo-breathe">
+        <svg class="geo-spin" viewBox="0 0 600 600" focusable="false">
+          <circle class="wline" cx="300" cy="300" r="288"/>
+          <circle class="wline-thin" cx="300" cy="300" r="252"/>
+          <circle class="wline-thin" cx="300" cy="300" r="184"/>
+          <g class="wline-thin">
+            <line x1="300" y1="300" x2="484" y2="300"/><line x1="300" y1="300" x2="392" y2="459"/><line x1="300" y1="300" x2="208" y2="459"/>
+            <line x1="300" y1="300" x2="116" y2="300"/><line x1="300" y1="300" x2="208" y2="141"/><line x1="300" y1="300" x2="392" y2="141"/>
+            <line x1="484" y1="300" x2="392" y2="459"/><line x1="392" y1="459" x2="208" y2="459"/><line x1="208" y1="459" x2="116" y2="300"/>
+            <line x1="116" y1="300" x2="208" y2="141"/><line x1="208" y1="141" x2="392" y2="141"/><line x1="392" y1="141" x2="484" y2="300"/>
+            <line x1="484" y1="300" x2="208" y2="459"/><line x1="484" y1="300" x2="208" y2="141"/><line x1="392" y1="459" x2="208" y2="141"/>
+            <line x1="392" y1="459" x2="116" y2="300"/><line x1="208" y1="459" x2="392" y2="141"/><line x1="116" y1="300" x2="392" y2="459"/>
+          </g>
+          <circle class="wline" cx="300" cy="300" r="92"/>
+          <circle class="wline" cx="484" cy="300" r="92"/><circle class="wline" cx="392" cy="459" r="92"/>
+          <circle class="wline" cx="208" cy="459" r="92"/><circle class="wline" cx="116" cy="300" r="92"/>
+          <circle class="wline" cx="208" cy="141" r="92"/><circle class="wline" cx="392" cy="141" r="92"/>
+          <circle class="wdot" cx="300" cy="300" r="3.5"/>
+          <circle class="wdot" cx="484" cy="300" r="2.5"/><circle class="wdot" cx="116" cy="300" r="2.5"/>
+          <circle class="wdot" cx="392" cy="141" r="2.5"/><circle class="wdot" cx="208" cy="459" r="2.5"/>
+        </svg>
+      </div>
+    </div>
+    <!-- Atomic orbits -->
+    <div class="geo-pos geo-pos-orbits" style="opacity:.06">
+      <div class="geo-breathe-slow">
+        <svg class="geo-spin-rev" viewBox="0 0 600 600" focusable="false">
+          <circle class="wline-thin" cx="300" cy="300" r="148" stroke-dasharray="3 7"/>
+          <g class="wline">
+            <ellipse cx="300" cy="300" rx="278" ry="96"/>
+            <ellipse cx="300" cy="300" rx="278" ry="96" transform="rotate(60 300 300)"/>
+            <ellipse cx="300" cy="300" rx="278" ry="96" transform="rotate(120 300 300)"/>
+          </g>
+          <circle class="wline" cx="300" cy="300" r="34"/>
+          <circle class="wdot" cx="300" cy="300" r="5"/>
+          <circle class="wdot" cx="578" cy="300" r="4"/><circle class="wdot" cx="161" cy="540" r="4"/><circle class="wdot" cx="161" cy="60" r="4"/>
+          <circle class="wdot" cx="22" cy="300" r="3"/><circle class="wdot" cx="439" cy="540" r="3"/><circle class="wdot" cx="439" cy="60" r="3"/>
+        </svg>
+      </div>
+    </div>
+    <!-- Star geometry, lower right -->
+    <div class="geo-pos geo-pos-star" style="opacity:.055">
+      <div class="geo-breathe">
+        <svg class="geo-spin-slow" viewBox="0 0 600 600" focusable="false">
+          <circle class="wline" cx="300" cy="300" r="282"/>
+          <circle class="wline-thin" cx="300" cy="300" r="228"/>
+          <polygon class="wline" points="300,72 498,428 102,428"/>
+          <polygon class="wline" points="300,528 102,172 498,172"/>
+          <polygon class="wline-thin" points="300,118 452,218 414,406 186,406 148,218"/>
+          <circle class="wline-thin" cx="300" cy="300" r="72"/>
+          <circle class="wdot" cx="300" cy="72" r="3"/><circle class="wdot" cx="300" cy="528" r="3"/>
+          <circle class="wdot" cx="72" cy="300" r="3"/><circle class="wdot" cx="528" cy="300" r="3"/>
+        </svg>
+      </div>
+    </div>
+    <!-- Small orbits, lower left -->
+    <div class="geo-pos geo-pos-low" style="opacity:.05">
+      <div class="geo-breathe-slow">
+        <svg class="geo-spin" viewBox="0 0 600 600" focusable="false">
+          <circle class="wline-thin" cx="300" cy="300" r="272"/>
+          <circle class="wline-thin" cx="300" cy="300" r="196" stroke-dasharray="2 8"/>
+          <g class="wline">
+            <ellipse cx="300" cy="300" rx="238" ry="84"/>
+            <ellipse cx="300" cy="300" rx="238" ry="84" transform="rotate(60 300 300)"/>
+            <ellipse cx="300" cy="300" rx="238" ry="84" transform="rotate(120 300 300)"/>
+          </g>
+          <polygon class="wline-thin" points="300,104 470,398 130,398"/>
+          <circle class="wdot" cx="300" cy="300" r="4.5"/>
+        </svg>
+      </div>
+    </div>
+    <!-- Formula symbols -->
+    <div class="geo-symbols" style="opacity:.08">
+      <span class="s-lg" style="left:7%; top:9%">φ</span>
+      <span class="s-md" style="right:9%; top:15%">π</span>
+      <span class="s-md" style="left:11%; top:38%">√</span>
+      <span class="s-lg" style="right:7%; top:44%">∞</span>
+      <span class="s-sm" style="left:16%; top:63%">Δx</span>
+      <span class="s-md" style="right:14%; top:70%">θ</span>
+      <span class="s-sm" style="left:8%; top:84%">Σ</span>
+      <span class="s-md" style="right:10%; top:90%">λ</span>
+      <span class="s-sm" style="left:44%; top:6%">e = mc²</span>
+      <span class="s-sm" style="right:38%; top:56%">a² + b²</span>
+      <span class="s-sm" style="left:28%; top:26%">÷ ×</span>
+      <span class="s-md" style="right:26%; top:30%">Ω</span>
+    </div>
+  </div>
+  <header class="flow-head candle-glow flow-enter">
+    <div class="glow-orb" aria-hidden="true"></div>
+    <div class="motes" id="flowMotes" aria-hidden="true"></div>
+    <div class="flow-inner">
+      <p class="brandline font-display">Jinum <span class="dot" style="color:var(--seal)">·</span> Number Fortune</p>
+      <p class="domainline font-display">jinum.me</p>
+      <span class="flame-halo" style="margin-top:18px" id="flowFlame"></span>
+      <h1 class="font-display" id="flowHero"></h1>
+      <p class="intro" id="flowIntro"></p>
+
+      <section class="intro-block" aria-labelledby="sloganMain">
+        <div class="ornament" style="justify-content:center" aria-hidden="true">
+          <span class="ornament-line"></span><span class="ornament-diamond"></span><span class="ornament-line"></span>
+        </div>
+        <p class="slogan-main font-display" id="sloganMain"></p>
+        <p class="slogan-sub" id="sloganSub"></p>
+      </section>
+
+      <div class="paid-banner hidden" id="paidRecover" role="status" style="margin-top:20px; margin-bottom:0; width:100%; max-width:24rem; text-align:left"></div>
+
+      <div class="digits" role="group" id="digitsGroup"></div>
+
+      <div class="ornament" style="margin-top:24px" aria-hidden="true">
+        <span class="ornament-line"></span><span class="ornament-diamond"></span><span class="ornament-line"></span>
+      </div>
+
+      <div class="year-row">
+        <span class="lbl" id="yearLabel"></span>
+        <div class="year-toggle" role="group" id="yearToggle"></div>
+      </div>
+
+      <button type="button" class="btn-primary btn-begin font-display" id="beginBtn"></button>
+      <p class="fill-hint" id="fillHint"></p>
+      <p class="err-msg hidden" id="errMsg" role="alert"></p>
+
+      <div class="loader hidden" id="loader" role="status">
+        <span class="loader-orb">
+          <span class="loader-ring" aria-hidden="true"></span>
+          <span class="loader-ring" style="animation-delay:.9s" aria-hidden="true"></span>
+          <span id="loaderFlame"></span>
+        </span>
+        <div class="shimmer-track" style="margin-top:16px; width:208px" aria-hidden="true"></div>
+        <div class="shimmer-track" style="margin-top:8px; width:144px" aria-hidden="true"></div>
+      </div>
+
+      <p class="only-note" id="onlyNote"></p>
+    </div>
+  </header>
+
+  <main class="results hidden" id="results"></main>
+
+  <div class="svc-wrap" id="svcWrap">
+    <section class="svc-card" aria-labelledby="svcTitle">
+      <div class="svc-head">
+        <span class="flame-halo" id="svcFlame"></span>
+        <h3 class="font-display" id="svcTitle"></h3>
+        <span class="svc-new font-display" id="svcNewTag">NEW</span>
+      </div>
+      <p class="svc-desc" id="svcDesc"></p>
+      <p class="svc-price"><span class="amt font-display" id="svcPriceAmt"></span><span class="note" id="svcPriceNote"></span></p>
+      <h4 class="svc-sub font-display" id="svcNeedsTitle"></h4>
+      <ul class="svc-needs" id="svcNeeds"></ul>
+      <p class="svc-delivery" id="svcDelivery"></p>
+      <p class="svc-nopromise" id="svcNoPromise"></p>
+      <form class="svc-form" id="svcForm" novalidate>
+        <div class="svc-field">
+          <label for="svcBirthday" id="lblBirthday"></label>
+          <input class="svc-input" type="date" id="svcBirthday" />
+        </div>
+        <div class="svc-field">
+          <label id="lblGender"></label>
+          <div class="svc-toggle" role="group" id="genderToggle"></div>
+        </div>
+        <div class="svc-field">
+          <label for="svcPhone" id="lblPhone"></label>
+          <input class="svc-input" type="tel" id="svcPhone" autocomplete="tel" />
+        </div>
+        <div class="svc-field">
+          <label id="lblFocus"></label>
+          <div class="svc-toggle" role="group" id="focusToggle"></div>
+        </div>
+        <div class="svc-field hidden" id="focusOtherField">
+          <label for="svcFocusOther" id="lblFocusOther"></label>
+          <input class="svc-input" type="text" id="svcFocusOther" maxlength="60" />
+        </div>
+        <div class="svc-field">
+          <label for="svcEmail" id="lblEmail"></label>
+          <input class="svc-input" type="email" id="svcEmail" autocomplete="email" />
+        </div>
+        <p class="err-msg hidden" id="svcErr" role="alert"></p>
+        <div class="notice hidden" id="svcNotice" role="note">
+          <h5 class="font-display" id="svcNoticeTitle"></h5>
+          <p id="svcNoticeBody"></p>
+          <button type="button" class="btn-close" id="svcNoticeClose"></button>
+        </div>
+        <button type="submit" class="btn-seal btn-svc font-display" id="svcSubmit"></button>
+      </form>
+    </section>
+  </div>
+
+  <footer class="rules">
+    <div class="ornament" style="justify-content:center" aria-hidden="true">
+      <span class="ornament-line"></span><span class="ornament-diamond"></span><span class="ornament-line"></span>
+    </div>
+    <div class="inner">
+      <h2 class="font-display" id="rulesTitle"></h2>
+      <p class="disclaimer" id="disclaimer"></p>
+      <ul id="rulesList"></ul>
+    </div>
+  </footer>
+</div>
+
+<script>
+"use strict";
+var DATA = {"pairGroup":{"11":"gSteady","12":"gRush","13":"gWealth","14":"gVital","16":"gCharm","17":"gWords","18":"gChange","19":"gCareer","21":"gRush","22":"gSteady","23":"gWords","24":"gChange","26":"gCareer","27":"gWealth","28":"gVital","29":"gCharm","31":"gWealth","32":"gWords","33":"gSteady","34":"gCareer","36":"gChange","37":"gRush","38":"gCharm","39":"gVital","41":"gVital","42":"gChange","43":"gCareer","44":"gSteady","46":"gWords","47":"gCharm","48":"gRush","49":"gWealth","61":"gCharm","62":"gCareer","63":"gChange","64":"gWords","66":"gSteady","67":"gVital","68":"gWealth","69":"gRush","71":"gWords","72":"gWealth","73":"gRush","74":"gCharm","76":"gVital","77":"gSteady","78":"gCareer","79":"gChange","81":"gChange","82":"gVital","83":"gCharm","84":"gRush","86":"gWealth","87":"gCareer","88":"gSteady","89":"gWords","91":"gCareer","92":"gCharm","93":"gVital","94":"gWealth","96":"gRush","97":"gChange","98":"gWords","99":"gSteady"},"aspects":[{"key":"ganqing","gov":["gCharm"],"firstPair":false},{"key":"shiye","gov":["gCareer"],"firstPair":false},{"key":"qinzi","gov":["gVital","gSteady"],"firstPair":false},{"key":"caifu","gov":["gWealth"],"firstPair":false},{"key":"jiankang","gov":["gWealth","gWords"],"firstPair":false},{"key":"renji","gov":["gVital"],"firstPair":false},{"key":"lianai","gov":["gCharm","gVital"],"firstPair":false},{"key":"fuqi","gov":["gWealth","gCareer"],"firstPair":false},{"key":"xueye","gov":["gCareer","gSteady"],"firstPair":false},{"key":"touzi","gov":["gRush","gChange"],"firstPair":false},{"key":"chuangye","gov":["gCareer","gWealth","gRush"],"firstPair":false},{"key":"guiren","gov":["gVital","gWords","gChange"],"firstPair":false},{"key":"xingge","gov":[],"firstPair":true},{"key":"fumu","gov":["gCareer","gVital"],"firstPair":false},{"key":"guansi","gov":["gWords","gRush"],"firstPair":false},{"key":"chuxing","gov":["gChange","gVital"],"firstPair":false},{"key":"hangye","gov":["gCareer","gWealth","gVital"],"firstPair":false}],"langs":{"zh":{"toneLabel":{"daji":"大吉","ji":"吉","xiong":"凶","jiDaiXiong":"吉带凶","xiongDaiJi":"凶带吉"},"table":["有点特殊","大展鸿图．可获成功","一盛一衰．劳而无功","蒸蒸日上．百事顺遂","坎坷前途．苦难折磨","生意欣荣．名利双收","天降幸运．可成大功","和气致祥．必获成功","贯彻志望．成功可期","独营无力．财利无望","空费心力．徒劳无功","稳健着实．必得人望","薄弱无力．谋事难成","天赋吉运．能得人望","是成是败．惟靠坚毅","大事成就．一定兴隆","成就大业．名利双收","有贵人助．可得成功","顺利昌隆．百事亨通","内外不合．障碍重重","历尽艰难．焦心忧劳","专心经营．善用智能","怀才不遇．事不如意","名显四方．终成大业","须靠自力．能奏大功","天时地利．再得人格","波澜起伏．凌驾万难","一盛一衰．可守成功","遇衰转吉．遇厄转好","青云直上．才略奏功","吉凶参半．得失相伴","名利双收．大业成就","池中之龙．成功可望","智能慎始．必可昌隆","灾难不绝．难望成功","中吉之数．进退保守","波澜重叠．常陷穷困","逢凶化吉．风调雨顺","名虽可得．利则难获","光明坦途．指日可待","一盛一衰．浮沉不定","天赋吉运．前途无限","事业不专．十九不成","忍耐自重．转凶为吉","事难遂愿．贪功好进","绿叶发枝．一举成名","坎坷不平．艰难重重","有贵人助．可成大业","名利俱全．繁荣富贵","遇吉则吉．遇凶则凶","吉凶互见．一成一败","一盛一衰．浮沉不常","雨过天青．即获成功","盛衰参半．先吉后凶","虽倾全力．难望成功","外观隆昌．内隐祸患","事与愿违．终难成功","努力经营．时来运转","浮沉多端．始凶终吉","遇事犹疑．难望成事","心迷意乱．难定方针","云遮半月．百隐风波","烦闷懊恼．事事难展","万物化育．繁荣之象","十九不成．徒劳无功","吉运自来．能享盛名","内外不和．信用缺乏","事事如意．富贵自来","不失先机．可望成功","动摇不安．常陷逆境","惨淡经营．难免贫困","吉凶参半．惟赖勇气","得而复失．难以安顺","安乐自来．自然吉祥","如无智谋．难望成功","吉中带凶．进不如守","此数大凶．破产之象","先苦后甘．不致失败","有得有失．华而不实","前途无光．希望不大"],"matrix":{"gWealth":["正缘能量强，感情稳，容易遇到合适的人","做事有章法，业绩容易稳住，适合慢慢做大","家里气氛稳，孩子听得进话，适合多陪伴","正财能量强，钱来得稳，适合存钱不适合乱投","身体底子稳，注意别熬夜透支就好","贵人不多但实在，朋友少而可靠","恋爱态度认真，不玩暧昧，适合谈长久","夫妻同心，钱和感情都往一处走","学业稳，记性好，考试容易发挥正常","偏财倾向弱，正财为主，投资偏财别抱大希望","开店做生意正财能量在，适合慢慢做，别急着扩张","贵人实在，小人少，有事贵人愿意帮","性格实在，讲道理，脾气稳","跟父母长辈关系稳，家里有事互相帮","口舌少，是非不容易沾身，有事讲道理就好","出行搬家稳，异地发展正财能量在，适合慢慢扎根","适合跟钱财、业绩、服务人打交道的方向"],"gVital":["感情轻松，身边有人帮，容易遇到好缘分","贵人多，机会多，事业容易有人拉一把","家里气氛轻松，孩子愿意跟你说话","财来得轻松，贵人带来的机会多，别贪多就好","心情好，身体跟着轻松，别吃太多就好","人缘好，朋友多，走到哪里都有人帮","恋爱开心，两个人相处轻松，容易互相吸引","夫妻相处轻松，有事商量着来，少吵架","学业轻松，贵人老师多，遇到不会的多问就好","偏财机会多在贵人带来，但来得轻松去得也快，别贪","开店做生意贵人多，客人容易介绍客人，别贪多就好","贵人多，人缘好，小人难近身","性格乐观，好相处，脾气好","跟父母长辈处得轻松，有事商量着来","贵人多，是非有人帮着化解，少掺和别人的事就好","出行搬家贵人多，异地容易有人接应","适合跟人打交道、有贵人带的方向"],"gCareer":["感情专一，认定了就不轻易变，适合长久","能力强，有责任心，事业上容易被重用","对孩子要求有分寸，管得住也讲道理","钱靠本事赚，收入稳，适合长期经营","身体底子能扛，但别长期透支，要留时间休息","说话算数，朋友信得过，人缘稳","恋爱认真，行动多过嘴上说，适合结婚","夫妻互相撑，家里的大事小事都有人扛","学业靠下功夫，越稳越好，考试临场发挥稳","偏财靠本事和长期经营，别指望一夜来钱","开店做生意靠本事和口碑，适合长期经营","贵人看重你的本事，小人少，靠实力说话","性格有责任心，说到做到，脾气稳但固执","跟父母长辈互相撑，家里的事有人扛","做事讲规矩，是非不容易找上门，别急着替人出头","出行搬家靠本事，异地发展适合长期经营","适合靠专业和技术吃饭的方向"],"gSteady":["感情慢热，认定了就守着，别急着催对方","事业求稳，适合守住现有的，再慢慢加","对孩子耐心，陪伴多，适合慢慢教","钱守得住，适合存钱，别急着换投资","身体稳，但容易拖小毛病，有不舒服早点看","朋友不多，但来往久，关系稳","恋爱慢热，喜欢了就专一，别逼对方表态","夫妻细水长流，平平淡淡反而长久","学业慢热，适合按部就班，别急着赶进度","偏财倾向弱，适合守住本钱，别换来换去","开店做生意适合守住一家，别急着开分店","贵人不多但稳，小人也少，守住自己的圈子就好","性格慢热，耐心好，脾气稳但爱钻牛角尖","跟父母长辈细水长流，平平淡淡反而长久","是非少，守住自己的事，别掺和别人的争执","出行搬家宜稳，别急着换地方，守住现有的就好","适合稳当、长期、不用常变动的方向"],"gRush":["感情来得急，容易一头热，冷静一下再决定","敢拼敢冲，事业起伏大，别把全部都押上","对孩子容易急，先缓一缓再管教","花钱冲动，投资要慢，容易大进大出","情绪起伏大，睡眠容易受影响，别硬撑","说话直，容易得罪人，急事慢说","恋爱来得快去得也快，别一头热就定下来","夫妻容易为钱和决定吵架，先冷静再谈","学业起伏大，考试容易冲动答错，先稳住再交卷","偏财起伏大，容易大进大出，下手前先想好能承受多少","开店做生意敢拼，但起伏大，别把全部本钱一次押上","贵人少，小人倾向要留心，冲动容易给小人机会","性格敢拼，脾气急，做决定快","跟父母长辈容易急，先缓一缓再说话","容易冲动惹口舌，做决定前先冷一冷，是非倾向要留心","出行搬家变动大，决定前先冷一冷，别一头热","适合敢拼、变动大、回报也起伏大的方向"],"gChange":["感情多变，容易想多，别自己吓自己","脑子活，想法多，适合变动多的工作，别三心二意","孩子想法多，要多听，少用老办法管","偏财机会多，但来得快去得也快，别贪","心思重，容易失眠，要学会放下","朋友来来去去，真朋友要慢慢看","恋爱里想得多，容易猜疑，先问清楚再下结论","夫妻之间别猜来猜去，有话直接说","学业想法多，适合变动多的学习方式，别三心二意","偏财机会多，变动也大，来得快去得也快，别贪","开店做生意变动多，适合换花样、换地方试，别三心二意","贵人来去快，小人容易在变动里出现，签字和承诺要留心","性格想法多，变来变去，脾气跟着心情走","跟父母长辈想法不一样，多听少顶嘴","变动多，是非容易跟着变动来，签字和口头承诺要留心","出行搬家变动多，异地机会多，但要留心水土和人情","适合脑子活、想法多、变动多的方向"],"gCharm":["桃花旺，异性缘好，感情细腻但想得多","心思细，适合跟人打交道的工作，别想太多拖慢事","对孩子细心，但别想太多，先陪伴再要求","桃花带来的机会多，但钱要分清，别为感情乱花","心思重，容易失眠，要学会放下","人缘好，异性缘尤其旺，但要分清谁是真朋友","恋爱运旺，容易心动，要看清对方再投入","夫妻感情细腻，适合多沟通，少猜疑","学业心思细，但想得多容易分心，先把基础做扎实","偏财容易跟着人情和桃花来，分清机会和人情","开店做生意靠人缘和口碑，店面和服务要细心","贵人多在异性朋友里，小人多在误会里，有话先问清楚","性格细腻，心思多，脾气软但容易想不开","跟父母长辈感情细腻，多沟通，少猜疑","心思多，是非多在误会里，有话先问清楚","出行搬家心思多，异地容易想家，先问清楚再决定","适合细心、讲品位、跟人打交道的方向"],"gWords":["感情容易吵架，多在嘴上，要先冷静再说话","工作上口舌多，是非多，少说多做更稳","跟孩子说话容易急，先听孩子说完再开口","钱容易花在应酬和嘴上，管住嘴就管住钱","口舌和烦心事多，睡眠容易受影响","说话直，容易得罪人，贵人要靠稳来补","恋爱里话多，吵架多在嘴上，别说气话","夫妻吵架多在嘴上，把话说清楚，别冷战","学业容易被口舌和烦心事分心，少掺和，多留时间读书","偏财倾向弱，口舌和应酬容易把钱花掉，先管住花钱","开店做生意口舌多，客人纠纷要先冷静，别说气话","小人倾向较明显，口舌容易招小人，少说多做","性格直，口才好，脾气来得快","跟父母长辈说话容易急，先听完再开口","口舌倾向较明显，是非容易从嘴上起，少说气话","出行搬家口舌多，合同和承诺要先看清楚","适合靠口才、讲道理、少掺和是非的方向"]},"aspectName":{"ganqing":"感情","shiye":"事业","qinzi":"亲子","caifu":"财富","jiankang":"健康","renji":"人际","lianai":"恋爱","fuqi":"夫妻","xueye":"学业/考试","touzi":"投资/偏财","chuangye":"创业/开店做生意","guiren":"贵人/小人","xingge":"性格/脾气","fumu":"父母/长辈关系","guansi":"官司/是非","chuxing":"出行/搬家/异地发展","hangye":"适合的行业/职业方向"},"aspectNoun":{"ganqing":"感情","shiye":"事业","qinzi":"亲子","caifu":"财富","jiankang":"健康","renji":"人际","lianai":"恋爱","fuqi":"夫妻","xueye":"学业","touzi":"投资偏财","chuangye":"创业开店","guiren":"贵人和小人","xingge":"性格","fumu":"父母长辈","guansi":"官司是非","chuxing":"出行搬家","hangye":"职业方向"},"liunianName":"流年运势","briefTpl":{"good":"总体顺，{noun}没有大阻力，顺其自然就好","bad":"总体阻力大，{noun}要多留心，别急着做决定","mixed":"总体有好有坏，{noun}先稳住，再看机会"},"briefSpecial":{"guiren":{"good":"总体顺，贵人没有大阻力，小人也少，顺其自然就好"},"chuxing":{"good":"总体顺，出行搬家没有大阻力，按部就班就好"}},"overallSummary":{"good":"整体是吉的——{phrase}。事情多半能顺着走，贵人和机会都愿意靠近，适合稳稳地把日子往前推。","bad":"整体阻力偏大——{phrase}。做事要多留心，先守后攻，别急着做大决定，稳住就是最好的应对。","mixed":"整体有好有坏——{phrase}。顺的地方要守住，卡的地方要留心，节奏稳了，好的部分自然会占上风。"},"liunianBrief":{"daji":"这一年比较特别，是难得的好年份，机会比往年多，适合把想了很久的事正式提上日程，但越是好年越要稳稳抓住，别贪多。","ji":"这一年整体是顺的，事情容易成，阻力不大，适合把计划往前推，稳住节奏，好结果会慢慢来。","xiong":"这一年整体偏难，阻力多、进展慢，适合把步子放慢，先守住手里的东西，别急着做大决定，熬过去就是转机。","jiDaiXiong":"这一年先难后顺，前面要忍耐、自重，后半段才有转机，上半年守得住，下半年才接得住机会。","xiongDaiJi":"这一年前段偏难，但不是一路难到底，守得住就有转机，适合先把小事做好，慢慢等势头回转。"},"tones":{"0":"","1":"","2":"","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"","11":"","12":"","13":"","14":"","15":"","16":"","17":"","18":"","19":"","20":"","21":"","22":"","23":"","24":"","25":"","26":"","27":"","28":"","29":"","30":"","31":"","32":"","33":"","34":"","35":"","36":"","37":"","38":"","39":"","40":"","41":"","42":"","43":"","44":"","45":"","46":"","47":"","48":"","49":"","50":"","51":"","52":"","53":"","54":"","55":"","56":"","57":"","58":"","59":"","60":"","61":"","62":"","63":"","64":"","65":"","66":"","67":"","68":"","69":"","70":"","71":"","72":"","73":"","74":"","75":"","76":"","77":"","78":"","79":""}},"en":{"toneLabel":{"daji":"Great Fortune","ji":"Fortunate","xiong":"Challenging","jiDaiXiong":"Fortunate, with Caution","xiongDaiJi":"Hard at First, Then Better"},"table":["Something special","Great prospects; success within reach","Rise and fall; effort without reward","Rising steadily; everything goes smoothly","A rocky road; hardship and strain","Business flourishes; fame and profit together","Luck descends; great success is possible","Harmony brings blessing; success is sure","Hold to your aim; success can be expected","Going it alone lacks strength; wealth is hard to come by","Effort spent in vain; little to show for it","Steady and solid; earns people's respect","Weak foundations; plans are hard to achieve","Gifted with good fortune; wins people's respect","Success or failure rests on perseverance","Great things achieved; prosperity is certain","A great undertaking; fame and profit together","Helped by the right people; success is attainable","Smooth and flourishing; everything prospers","Discord inside and out; obstacles everywhere","Through many hardships; worry and toil","Devote yourself; use your wisdom well","Talent unrecognized; things go against you","Fame in all directions; a great work completed","Rely on your own strength; great success is possible","Right time, right place, and character besides","Storms and upheavals, overcome by endurance","Rise and fall; the success you have can be held","Decline turns to fortune; trouble turns to good","Rising straight up; talent brings achievement","Fortune and misfortune in halves; gain comes with loss","Fame and profit together; a great work achieved","A dragon in the pool; success can be hoped for","Begin wisely and carefully; prosperity will follow","Troubles without end; success is hard to hope for","Moderate fortune; keep a balanced course","Waves upon waves; often trapped in hardship","Danger turns to safety; all goes well","Fame may come, but profit is hard to gain","A bright, open road; success is near","Rise and fall; drifting and unsteady","Gifted with good fortune; a limitless future","Scattered focus at work; much attempted, little completed","Patience and self-respect turn misfortune into fortune","Wishes are hard to fulfill; too eager for quick success","Green leaves sprout; fame in one stroke","A rough, uneven road; hardship upon hardship","Helped by the right people; a great work is attainable","Fame and profit complete; prosperity and wealth","Good with the good, bad with the bad","Fortune and misfortune intertwined; one success, one failure","Rise and fall; drifting and changeable","The rain passes and the sky clears; success arrives","Prosperity and decline in halves; good first, trouble later","All effort spent; success is hard to hope for","Splendid on the outside; hidden trouble within","Wishes go against you; success is hard in the end","Work diligently; fortune turns in your favor","Drifting and changeable; hard first, fortunate later","Hesitant in everything; success is hard to achieve","A confused heart; hard to settle on a direction","Clouds cover the half moon; hidden storms","Stifled and distressed; everything is hard to unfold","All things nurtured; an image of prosperity","Much attempted, little completed; effort in vain","Fortune comes of itself; a fine name can be enjoyed","Discord inside and out; trust is lacking","Everything as wished; wealth comes of itself","Seize the first chance; success can be hoped for","Shaken and uneasy; often in adversity","Managed with difficulty; poverty is hard to avoid","Fortune and misfortune in halves; rely on courage","Gained, then lost; hard to settle in peace","Peace and ease come naturally; naturally auspicious","Without wisdom and strategy, success is hard to hope for","Fortune carrying misfortune; better to hold than to advance","A greatly unlucky sign; an image of ruin","Bitter first, sweet later; failure is avoided","Gains and losses; showy but insubstantial","A future without light; little hope"],"matrix":{"gWealth":["Steady love energy; relationships are stable and the right person is easy to meet","Methodical at work; results hold steady and grow slowly","A calm home; children listen, so patient company works best","Strong steady income; money comes reliably — save, don't speculate","A solid constitution; just don't burn out staying up late","Few helpers, but real ones; friends are few and dependable","Serious about love, no games; suited to a lasting relationship","Partners of one heart; money and love pull in the same direction","Steady studies and a good memory; exams usually go as expected","Windfalls are weak; rely on regular income, not speculation","Steady money supports a business; grow slowly, don't rush to expand","Helpers are genuine and troublemakers few; people step up when needed","Down-to-earth, reasonable, and even-tempered","Steady ties with parents and elders; the family helps each other","Little gossip; disputes rarely stick — reason settles things","Steady travel and moves; regular income supports settling somewhere new","Suited to work involving money, results, and serving people"],"gVital":["Relaxed in love; people around you help, and good matches come easily","Many helpers and chances; someone gives your career a lift","A relaxed home; children open up and talk to you","Money comes easily, often through helpful people — just don't get greedy","A good mood keeps the body light; just don't overeat","Well-liked wherever you go; friends are many and help is near","Happy in love; you attract each other and get along easily","An easy marriage; you talk things through and rarely quarrel","Easy studies; teachers and mentors help — ask when stuck","Windfalls often arrive through helpful people but leave just as fast; don't be greedy","A business benefits from helpers; customers bring more customers — don't overreach","Many helpers, good popularity; troublemakers can hardly get near","Optimistic, easy to get along with, good-tempered","Easy relations with parents and elders; things get talked through","Helpers dissolve disputes for you; just stay out of other people's fights","Travel and moves go well; people receive you in new places","Suited to people-facing work where mentors can guide you"],"gCareer":["Devoted in love; once committed, you don't waver — suited to the long term","Capable and responsible; likely to be trusted with important work","Measured with children; firm but fair","Money is earned by skill; income is steady and suits long-term building","A hardy body, but don't overdraw it for long; leave time to rest","You keep your word; friends trust you and ties are steady","Serious in love; actions over words — suited to marriage","Partners carry the family together, big things and small","Studies reward effort; the steadier you are, the steadier the exam","Windfalls come from skill and long-term work, not overnight luck","A business grows on skill and reputation; suited to the long term","Helpers respect your ability; troublemakers are few — let results speak","Responsible, keeps promises; steady-tempered but stubborn","You and your parents support each other; family burdens are shared","You follow the rules, so disputes rarely find you; don't rush to fight others' battles","Travel and moves rest on your own ability; good for long-term building elsewhere","Suited to work that lives on professional skill and expertise"],"gSteady":["Slow to warm in love; once committed you stay — don't rush the other person","Work favors stability; hold what you have, then add slowly","Patient with children; plenty of company, taught gently over time","Money is easy to keep; good for saving — don't keep switching investments","Generally well, but small complaints get dragged out; see to them early","Few friends, but long-lasting ones; relationships are steady","Slow to warm in love; devoted once in love — don't pressure for answers","A quiet, lasting marriage; plain days endure longest","Slow-starting studies; steady step-by-step progress beats rushing","Windfalls are weak; guard your capital and don't keep switching","A business should hold one store well before opening another","Helpers are few but steady; troublemakers too — guard your own circle","Slow to warm, patient, even-tempered, but can get stuck in a rut","A quiet, lasting bond with parents and elders; plain days endure","Few disputes; mind your own affairs and stay out of others' quarrels","Travel and moves favor staying put; hold what you have rather than rushing to relocate","Suited to steady, long-term work with little change"],"gRush":["Love comes fast and hot-headed; cool down before deciding","Bold and daring, but work swings a lot; never stake everything","Quick to be strict with children; pause first, then discipline","Impulsive spending; investments swing wildly — slow down","Mood swings affect sleep; don't just push through","Blunt words offend easily; say urgent things slowly","Love arrives fast and leaves fast; don't commit in the heat of it","Couples quarrel over money and decisions; cool down, then talk","Studies swing; in exams, steady yourself before handing in — impulse causes errors","Windfalls swing hard, big in and big out; decide your limit before you start","A business can dare, but swings are big; never stake all your capital at once","Helpers are few and troublemakers need watching; impulsiveness gives them openings","Daring, quick-tempered, decides fast","Quick to clash with parents and elders; pause before speaking","Impulsiveness stirs up gossip; cool down before deciding and watch for disputes","Travel and moves change a lot; cool down before deciding, never on impulse","Suited to bold, fast-changing work with equally changeable returns"],"gChange":["Love is changeable and you overthink; don't scare yourself","Quick-minded with many ideas; suited to changeable work — don't be half-hearted","Children are full of ideas; listen more, rule less by old methods","Windfall chances are many but come and go fast; don't be greedy","A heavy mind and light sleep; learn to let things go","Friends come and go; true ones take time to recognize","You overthink in love and suspect easily; ask clearly before concluding","Don't guess at each other as a couple; say things directly","Many ideas in study; varied methods suit you — don't be half-hearted","Windfalls come with much change, fast in and fast out; don't be greedy","A business suits variety and trying new places; don't be half-hearted","Helpers come and go; troublemakers appear amid change — watch signatures and promises","Full of ideas, changeable; temper follows the mood","You and your elders think differently; listen more, talk back less","Change brings disputes with it; watch signatures and verbal promises","Much movement in travel; chances elsewhere are many — mind local ways and people","Suited to quick-minded, idea-rich, changeable work"],"gCharm":["Strong romantic pull and many admirers; feelings run deep but so does overthinking","Detail-minded; suited to people-facing work — don't let overthinking slow you down","Gentle and attentive with children; accompany first, require later","Romance brings chances, but keep money separate; don't spend wildly for love","A heavy mind and light sleep; learn to let things go","Well-liked, especially by the opposite sex; distinguish true friends","Strong love luck and easy heart-flutters; see a person clearly before investing","A delicate marriage; communicate more and suspect less","Detail-minded in study, but overthinking distracts; ground the basics first","Windfalls often follow social and romantic ties; separate chances from favors","A business lives on popularity and reputation; be careful with premises and service","Helpers are often friends of the opposite sex; troublemakers hide in misunderstandings — ask first","Sensitive and thoughtful; soft-tempered but prone to brooding","A delicate bond with parents and elders; communicate more, suspect less","Overthinking breeds disputes, mostly from misunderstanding; ask clearly first","Travel and moves come with homesickness and second thoughts; decide after asking clearly","Suited to careful, tasteful, people-facing work"],"gWords":["Love quarrels easily, mostly over words; cool down before speaking","Much gossip and friction at work; say less and do more","Quick words with children; hear them out before you speak","Money leaks through socializing and talk; guard your words to guard your money","Gossip and worries disturb sleep","Blunt words offend; steadiness is how you win helpers back","Many words in love, quarrels over talk; never speak in anger","Couples quarrel over words; say things clearly instead of going silent","Study is easily disturbed by gossip and worries; stay out of it and keep time for books","Windfalls are weak; social spending eats money — control spending first","A business faces gossip; stay calm in customer disputes and never speak in anger","Troublemakers are a real tendency; loose talk invites them — say less, do more","Direct, articulate, quick-tempered","Quick words with parents and elders; hear them out before you speak","Disputes start from the mouth; don't speak in anger","Travel and moves come with gossip; read contracts and promises carefully first","Suited to work using eloquence and reason, staying clear of disputes"]},"aspectName":{"ganqing":"Love & Relationships","shiye":"Career","qinzi":"Parenting & Children","caifu":"Wealth","jiankang":"Health","renji":"Social Connections","lianai":"Dating","fuqi":"Marriage","xueye":"Studies & Exams","touzi":"Investments & Windfalls","chuangye":"Business & Entrepreneurship","guiren":"Helpers & Troublemakers","xingge":"Character & Temper","fumu":"Parents & Elders","guansi":"Disputes & Legal Trouble","chuxing":"Travel, Moving & Living Elsewhere","hangye":"Suitable Industries & Careers"},"aspectNoun":{"ganqing":"relationships","shiye":"your career","qinzi":"parent-child relations","caifu":"wealth","jiankang":"health","renji":"social connections","lianai":"dating","fuqi":"marriage","xueye":"studies","touzi":"investments and windfalls","chuangye":"business","guiren":"helpers and troublemakers","xingge":"temperament","fumu":"relations with parents and elders","guansi":"disputes","chuxing":"travel and moving","hangye":"career direction"},"liunianName":"Yearly Fortune","briefTpl":{"good":"Overall smooth — {noun}: no great resistance; let it flow naturally","bad":"Overall resistance is strong — {noun}: extra care needed; don't rush into decisions","mixed":"Overall mixed — {noun}: steady first, then watch for the opening"},"briefSpecial":null,"overallSummary":{"good":"Overall fortunate — {phrase}. Most things flow your way; the right people and chances draw near. A good number for steadily pushing life forward.","bad":"Overall resistance is strong — {phrase}. Work matters with extra care: guard first, advance later, and don't rush big decisions. Steadiness is the best response.","mixed":"Overall mixed — {phrase}. Guard what flows, watch what stalls; keep your rhythm steady and the good side will naturally take the lead."},"liunianBrief":{"daji":"A rare, especially good year: chances are more plentiful than usual. Put long-considered plans formally on the agenda — and the better the year, the more steadily you should grasp it.","ji":"A smooth year overall: things come together easily with little resistance. Good for pushing plans forward — keep a steady rhythm and good results will come.","xiong":"A harder year overall: resistance is frequent and progress slow. Shrink your steps, guard what you hold, avoid big decisions — getting through it is itself the turning point.","jiDaiXiong":"A year of hard first, smooth later: patience and self-respect are needed early, and the turn comes in the second half. What you guard in the first half is what catches the chance in the second.","xiongDaiJi":"The early part of the year is hard, but it is not hard all the way: guard well and a turn will come. Do the small things properly and wait slowly for the current to change."},"tones":{"0":"","1":"","2":"","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"","11":"","12":"","13":"","14":"","15":"","16":"","17":"","18":"","19":"","20":"","21":"","22":"","23":"","24":"","25":"","26":"","27":"","28":"","29":"","30":"","31":"","32":"","33":"","34":"","35":"","36":"","37":"","38":"","39":"","40":"","41":"","42":"","43":"","44":"","45":"","46":"","47":"","48":"","49":"","50":"","51":"","52":"","53":"","54":"","55":"","56":"","57":"","58":"","59":"","60":"","61":"","62":"","63":"","64":"","65":"","66":"","67":"","68":"","69":"","70":"","71":"","72":"","73":"","74":"","75":"","76":"","77":"","78":"","79":""}},"ja":{"toneLabel":{"daji":"大吉","ji":"吉","xiong":"凶","jiDaiXiong":"吉・注意あり","xiongDaiJi":"凶のち吉"},"table":["少し特別な数","大きく展け、成功を得られる","栄枯盛衰、労して功なし","日に日に上向き、何事も順調","前途は険しく、苦難に悩む","商売繁盛、名利ともに得る","天の幸運、大功を成せる","和やかさが祥を招き、成功必至","志を貫けば、成功は期せる","単独では力不足、財利に恵まれない","心労ばかりで、実りなし","堅実で着実、人望を得る","基盤が弱く、事が成しにくい","天賦の吉運、人望を得る","成否は粘り強さ次第","大事を成し、必ず栄える","大業を成し、名利ともに得る","貴人の助けあり、成功を得られる","順調そのもの、何事も亨通","内外が合わず、障害が多い","艱難を経て、心身ともに疲れる","専心経営、知恵を活かせる","才能が認められず、思い通りにいかない","名が四方に知れ、大業を成す","自力に頼れば、大功を奏せる","天の時・地の利・人の和","波乱万丈、万難を乗り越える","栄枯はあれど、成功は守れる","衰運が吉に転じ、厄が好転する","青雲の志、才能が功を奏す","吉凶相半ばし、得失が伴う","名利ともに得て、大業成就","池の中の龍、成功が望める","知恵と慎重な始まりで、必ず栄える","災難が絶えず、成功は望みにくい","中吉の数、進退は慎重に","波乱が重なり、困窮に陥りやすい","凶が吉に転じ、何事も順調","名は得られても、利は得にくい","明るい前途、成功は間近","栄枯不定、浮き沈みがある","天賦の吉運、前途は無限","事業に専念できず、多くは実らない","忍耐と自重で、凶が吉に転じる","願いが叶いにくく、功を焦る","緑葉が茂り、一躍有名に","険しく平らでなく、艱難が重なる","貴人の助けあり、大業を成せる","名利ともに全く、繁栄と富貴","吉に会えば吉、凶に会えば凶","吉凶が交わり、一勝一敗","栄枯浮沈、定まらない","雨上がりの青空、成功が訪れる","盛衰相半ばし、先に吉、後に凶","全力を尽くしても、成功は望みにくい","外は華やかでも、内に禍根あり","思い通りにならず、成功は難しい","努力と経営で、時が味方する","浮沈多く、始め凶で終わり吉","迷いが多く、事が成しにくい","迷いが晴れず、方針が定まらない","雲が半月を隠し、波乱含み","煩悶と悩み、何事も展けない","万物が育ち、繁栄の相","多くは実らず、労して功なし","吉運が自ら来て、盛名を享ける","内外が和せず、信用に欠ける","万事如意、富貴が自ら来る","先機を逃さず、成功が望める","動揺と不安、逆境に陥りやすい","惨憺たる経営、貧しさを免れにくい","吉凶相半ばし、勇気に頼る","得ては失い、安らぎが難しい","安楽が自ら来て、自然に吉祥","知恵と策がなければ、成功は望みにくい","吉の中に凶、進むより守る","大凶の数、破産の相","先に苦く後に甘い、失敗には至らない","得失あり、華やかだが実がない","前途に光なく、希望は薄い"],"matrix":{"gWealth":["正縁の気が強く、恋愛は安定し、良い相手に出会いやすい","仕事は筋道立てて進み、業績は安定し、ゆっくり大きくできる","家庭は穏やかで、子どもは話を聞くので、寄り添うのが一番","正財の気が強く、お金は安定して入る。貯金向きで、投機は不向き","体の基礎は安定。夜更かしで消耗しないように","助けてくれる人は多くないが確かで、友人は少なくても頼れる","恋愛は真面目で、遊びはしない。長く続く関係向き","夫婦は心を一つにし、お金も気持ちも同じ方向を向く","学業は安定し、記憶も良い。試験は実力を発揮しやすい","偏財は弱めで、正財が中心。投資の偏財には期待しすぎない","商売は正財の気があり、ゆっくり育てるのが良い。拡大は急がない","助けてくれる人は確かで、小人は少ない。困った時に助けてくれる","性格は実直で、道理を重んじ、気性は穏やか","親や長輩との関係は安定し、家族で助け合える","口論は少なく、揉め事に巻き込まれにくい。道理で話せば収まる","外出や引っ越しは安定。異地でも正財の気があり、ゆっくり根を張れる","お金・業績・人と接するサービスに向いた方向"],"gVital":["恋愛は軽やかで、周囲の助けもあり、良い縁に出会いやすい","貴人が多く、機会も多い。キャリアは誰かに引き上げてもらいやすい","家庭は和やかで、子どもがよく話してくれる","お金は軽やかに入り、貴人からの機会も多い。欲張らなければ良い","気分が良く、体も軽やか。食べ過ぎだけ注意","人付き合いが良く、友人が多い。どこへ行っても助けがある","恋愛は楽しく、互いに惹かれ合い、付き合いやすい","夫婦は穏やかに付き合え、話し合いで進み、喧嘩が少ない","学業は軽やかで、先生や貴人に恵まれる。分からないことは聞けば良い","偏財は貴人から来ることが多いが、去るのも速い。欲張らない","商売は貴人に恵まれ、お客がお客を紹介してくれる。欲張らない","貴人が多く、人付き合いも良く、小人は近寄りにくい","性格は明るく、付き合いやすく、気性も良い","親や長輩と穏やかに付き合え、話し合いで進められる","貴人が多く、揉め事は誰かが解いてくれる。他人の喧嘩には加わらない","外出や引っ越しは貴人に恵まれ、異地でも迎えてくれる人がいる","人と接し、貴人に導かれる方向に向いている"],"gCareer":["恋愛は一途で、一度決めたら揺らがない。長続きする関係向き","能力が高く、責任感があり、仕事で重用されやすい","子どもへの接し方は節度があり、厳しさと道理を兼ねる","お金は実力で稼ぎ、収入は安定。長期経営向き","体は丈夫だが、長期の消耗は禁物。休む時間を残して","言葉に責任があり、友人に信頼され、付き合いは安定","恋愛は真剣で、言葉より行動。結婚向き","夫婦で支え合い、家の大小事を共に担う","学業は努力次第。安定すればするほど、試験も安定する","偏財は実力と長期経営から。一晩で稼ぐことは期待しない","商売は実力と評判で成り立つ。長期経営向き","貴人はあなたの実力を評価し、小人は少ない。実力で語るタイプ","性格は責任感が強く、言ったことは守る。穏やかだが頑固な面も","親や長輩と支え合い、家のことを共に担う","筋の通った行いをし、揉め事は近寄りにくい。他人のために先走らない","外出や引っ越しは実力次第。異地でも長期経営向き","専門性と技術で食べていく方向に向いている"],"gSteady":["恋愛は奥手で、一度決めたら守り続ける。相手を急かさない","キャリアは安定重視。今あるものを守り、ゆっくり増やす","子どもに忍耐強く、寄り添いが多い。ゆっくり教えるのが合う","お金は守りやすく、貯金向き。投資先をコロコロ変えない","体は安定しているが、小さな不調を引きずりやすい。早めに診て","友人は多くないが、長く続く。関係は安定","恋愛は奥手で、好きになれば一途。相手に答えを迫らない","夫婦は細く長く、平凡な日々こそ長続きする","学業は奥手。手順通りに進め、進度を急がない","偏財は弱め。元本を守り、変え続けないのが良い","商売は一店を守るのが良い。二店目を急がない","貴人は多くないが安定し、小人も少ない。自分の輪を守れば良い","性格は奥手で、忍耐強く、穏やかだが、一つの考えに固まる面も","親や長輩とは細く長く、平凡な日々こそ長続きする","揉め事は少なく、自分のことを守り、他人の争いには加わらない","外出や引っ越しは安定重視。場所替えを急がず、今あるものを守る","安定し、長く続き、変化の少ない方向に向いている"],"gRush":["恋愛は急で、熱しやすい。冷静になってから決める","果敢に挑むが、キャリアの浮沈は大きい。全てを賭けない","子どもには急ぎがち。まず落ち着いてから、しつける","衝動買いが多く、投資は大きく出入りする。ゆっくりと","感情の起伏が大きく、睡眠に影響しやすい。無理をしない","言葉が直で、人を怒らせやすい。急ぎの話ほどゆっくりと","恋愛は来るのも去るのも速い。熱で決めない","夫婦はお金と決断で喧嘩しやすい。まず冷静に、それから話す","学業の浮沈が大きく、試験は衝動的なミスに注意。まず落ち着いて提出","偏財の浮沈が大きく、出入りが激しい。始める前に限度を決める","商売は果敢だが浮沈が大きい。全資金を一度に賭けない","貴人は少なく、小人には注意。衝動が小人に隙を与える","性格は果敢で、気が短く、決断が速い","親や長輩とは急にぶつかりやすい。まず落ち着いてから話す","衝動で口論を招きやすい。決める前に冷静に。揉め事に注意","外出や引っ越しは変化が大きい。決める前に冷静に、熱で決めない","果敢で、変化が大きく、リターンも浮沈する方向に向いている"],"gChange":["恋愛は変わりやすく、考えすぎる。自分を怖がらせない","頭の回転が速く、アイデアが多い。変化の多い仕事向き。移り気は禁物","子どものアイデアは多い。よく聞き、昔のやり方で縛らない","偏財の機会は多いが、来るのも去るのも速い。欲張らない","考え込みやすく、眠りが浅い。手放すことを覚える","友人は入れ替わりが多く、本当の友は時間をかけて見極める","恋愛では考えすぎて疑いやすい。結論の前に、はっきり聞く","夫婦では憶測し合わない。言葉ではっきり伝える","学業はアイデアが多く、変化のある学び方が合う。移り気は禁物","偏財は機会が多いが変化も大きく、出入りが速い。欲張らない","商売は変化が多く、目先を変えたり場所を試すのが合う。移り気は禁物","貴人は去来が速く、小人は変化の中で現れやすい。署名と約束に注意","性格はアイデアが多く変わりやすく、気性は気分次第","親や長輩とは考え方が違う。よく聞き、口答えは控える","変化が多く、揉め事も変化についてくる。署名と口約束に注意","外出や引っ越しは変化が多く、異地の機会も多い。水土と人情に注意","頭の回転が速く、アイデアが多く、変化の多い方向に向いている"],"gCharm":["桃花が盛んで、異性に好かれやすく、繊細だが考えすぎる","心配りが細かく、人と接する仕事向き。考えすぎて遅くならないように","子どもには細やかだが、考えすぎない。まず寄り添い、それから求める","桃花からの機会は多いが、お金は分ける。恋愛で散財しない","考え込みやすく、眠りが浅い。手放すことを覚える","人付き合いが良く、異性に特に好かれる。本当の友を見極める","恋愛運が盛んで、ときめきやすい。相手をよく見てから気持ちを入れる","夫婦は繊細で、よく話し、疑いを減らすのが良い","学業は心配りが細かいが、考えすぎて集中が散る。まず基礎を固める","偏財は人情や桃花についてきやすい。機会と人情を分ける","商売は人付き合いと評判で成り立つ。店舗と接客は丁寧に","貴人は異性の友人に多く、小人は誤解の中に多い。まず確認を","性格は繊細で、考えが多く、気性は柔らかいが思い詰めやすい","親や長輩とは繊細な情があり、よく話し、疑いを減らす","考えすぎで揉め事は誤解から生まれやすい。まず確認を","外出や引っ越しは考えが多く、異地では故郷を想いやすい。決める前に確認","細やかで、品があり、人と接する方向に向いている"],"gWords":["恋愛は喧嘩しやすく、その多くは言葉から。まず冷静に、それから話す","仕事では口論と揉め事が多い。少なく話し、多く行うのが安定","子どもへの言葉が急になりやすい。子どもの話を最後まで聞いてから","お金は付き合いと言葉で出ていく。口を慎めばお金も守れる","口論と心配事が多く、睡眠に影響しやすい","言葉が直で、人を怒らせやすい。貴人は安定さで取り戻す","恋愛では言葉が多く、喧嘩は言葉から。怒りの言葉は言わない","夫婦の喧嘩は言葉から。はっきり話し、黙り込まない","学業は口論と心配事に邪魔されやすい。加わらず、読書の時間を残す","偏財は弱めで、口論と付き合いがお金を消す。まず支出を締める","商売は口論が多く、お客との揉め事はまず冷静に。怒りの言葉は禁物","小人の傾向がはっきりしている。口論が小人を招く。少なく話し、多く行う","性格は率直で、弁が立ち、気性は速く燃える","親や長輩への言葉が急になりやすい。最後まで聞いてから話す","口論の傾向がはっきりしている。揉め事は口から生まれる。怒りの言葉は禁物","外出や引っ越しは口論が多く、契約と約束はまず確認を","弁舌と道理を活かし、揉め事に加わらない方向に向いている"]},"aspectName":{"ganqing":"恋愛・感情","shiye":"仕事・キャリア","qinzi":"親子関係","caifu":"金運・財運","jiankang":"健康","renji":"人間関係","lianai":"恋愛運","fuqi":"夫婦関係","xueye":"学業・試験","touzi":"投資・偏財","chuangye":"起業・商売","guiren":"貴人・小人","xingge":"性格・気性","fumu":"親・長輩との関係","guansi":"裁判・揉め事","chuxing":"外出・引っ越し・異地発展","hangye":"向いている業界・職業"},"aspectNoun":{"ganqing":"恋愛","shiye":"仕事","qinzi":"親子関係","caifu":"金運","jiankang":"健康","renji":"人間関係","lianai":"恋愛","fuqi":"夫婦関係","xueye":"学業","touzi":"投資と偏財","chuangye":"商売","guiren":"貴人と小人","xingge":"気性","fumu":"親や長輩との関係","guansi":"揉め事","chuxing":"外出と引っ越し","hangye":"職業の方向"},"liunianName":"流年運勢","briefTpl":{"good":"全体は順調。{noun}に大きな抵抗はなく、自然に任せれば良い","bad":"全体の抵抗が大きい。{noun}には注意し、決断を急がない","mixed":"全体は良し悪しが混ざる。{noun}はまず安定させ、それから機会を見る"},"briefSpecial":null,"overallSummary":{"good":"全体は吉——{phrase}。物事は多くが順調に流れ、貴人と機会が近づいてくる。日々を着実に前に進めるのに良い。","bad":"全体の抵抗が大きい——{phrase}。行いには注意し、まず守ってから進み、大きな決断を急がない。安定こそ最善の応じ方。","mixed":"全体は良し悪しが混ざる——{phrase}。順調な所は守り、滞る所は注意する。リズムが安定すれば、良い部分が自然に勝ってくる。"},"liunianBrief":{"daji":"めったにない特別に良い年。機会は例年より多い。長く考えてきたことを正式に予定へ入れるのに良い。良い年ほど、着実に掴むこと。","ji":"全体に順調な年。物事がまとまりやすく、抵抗は小さい。計画を前に進めるのに良く、リズムを安定させれば良い結果が来る。","xiong":"全体に難しい年。抵抗が多く、進みは遅い。歩幅を小さくし、手元のものを守り、大きな決断は急がない。乗り越えること自体が転機になる。","jiDaiXiong":"前半は難しく、後半に順調になる年。前は忍耐と自重が必要で、転機は後半にある。上半期に守れたものが、下半期の機会を受け止める。","xiongDaiJi":"年の前半は難しいが、最後まで難しいわけではない。守り切れば転機が来る。小さなことをしっかり行い、ゆっくり流れの変化を待つ。"},"tones":{"0":"","1":"","2":"","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"","11":"","12":"","13":"","14":"","15":"","16":"","17":"","18":"","19":"","20":"","21":"","22":"","23":"","24":"","25":"","26":"","27":"","28":"","29":"","30":"","31":"","32":"","33":"","34":"","35":"","36":"","37":"","38":"","39":"","40":"","41":"","42":"","43":"","44":"","45":"","46":"","47":"","48":"","49":"","50":"","51":"","52":"","53":"","54":"","55":"","56":"","57":"","58":"","59":"","60":"","61":"","62":"","63":"","64":"","65":"","66":"","67":"","68":"","69":"","70":"","71":"","72":"","73":"","74":"","75":"","76":"","77":"","78":"","79":""}},"ko":{"toneLabel":{"daji":"대길","ji":"길","xiong":"흉","jiDaiXiong":"길 속 주의","xiongDaiJi":"흉 뒤에 길"},"table":["조금 특별한 수","크게 펼치니 성공을 얻을 수 있다","한 번 흥하고 한 번 쇠하니, 수고해도 공이 없다","날로 번창하니 모든 일이 순조롭다","앞길이 험하고 고난에 시달린다","장사가 번창하니 명성과 이익을 함께 얻는다","하늘의 행운이 내려 큰 공을 이룰 수 있다","화목함이 복을 부르니 성공이 확실하다","뜻을 관철하면 성공을 기대할 수 있다","혼자 힘으로는 부족하니 재물운이 약하다","헛수고만 하고 얻는 것이 없다","착실하고 단단하니 사람들의 신뢰를 얻는다","기반이 약해 일을 이루기 어렵다","타고난 길운으로 사람들의 신뢰를 얻는다","성공과 실패는 끈기에 달렸다","큰일을 이루니 반드시 번창한다","대업을 이루니 명성과 이익을 함께 얻는다","귀인의 도움이 있으니 성공할 수 있다","순조롭고 번창하니 모든 일이 형통하다","안팎이 맞지 않아 장애가 많다","온갖 어려움을 겪으니 마음과 몸이 지친다","전심으로 경영하고 지혜를 잘 쓴다","재능을 인정받지 못해 일이 뜻대로 안 된다","이름이 사방에 알려지니 대업을 이룬다","스스로의 힘에 의지하면 큰 공을 세울 수 있다","하늘의 때와 땅의 이로움, 그리고 인격","파란이 겹치나 만 가지 어려움을 넘어선다","쇠운이 길로 바뀌니 성공을 지킬 수 있다","쇠함이 길로 바뀌고 재앙이 좋아진다","청운의 뜻, 재략이 공을 세운다","길흉이 반반이니 얻음과 잃음이 함께한다","명성과 이익을 함께 얻으니 대업이 성취된다","연못 속의 용, 성공을 바랄 수 있다","지혜롭고 신중하게 시작하면 반드시 번창한다","재난이 끊이지 않으니 성공을 바라기 어렵다","중간 길의 수, 진퇴는 신중히","파란이 겹치니 곤궁에 빠지기 쉽다","흉이 길로 바뀌니 모든 일이 순조롭다","이름은 얻어도 이익은 얻기 어렵다","밝고 열린 앞길, 성공이 머지않다","한 번 흥하고 한 번 쇠하니 부침이 정해지지 않는다","타고난 길운으로 앞날이 무한하다","사업에 전념하지 못하니 많은 일이 이루어지지 않는다","인내하고 자중하면 흉이 길로 바뀐다","뜻을 이루기 어렵고 공을 서두른다","푸른 잎이 가지를 뻗으니 한 번에 이름을 얻는다","험하고 평탄하지 않아 어려움이 겹친다","귀인의 도움이 있으니 대업을 이룰 수 있다","명성과 이익이 온전하니 번영과 부귀를 누린다","길을 만나면 길하고 흉을 만나면 흉하다","길흉이 함께 보이니 한 번 성공하고 한 번 실패한다","한 번 흥하고 한 번 쇠하니 부침이 일정하지 않다","비가 그치고 하늘이 개니 성공이 찾아온다","흥함과 쇠함이 반반, 먼저 길하고 뒤에 흉하다","온 힘을 다해도 성공을 바라기 어렵다","겉은 번창하나 안에 화근이 숨어 있다","뜻과 어긋나니 결국 이루기 어렵다","부지런히 경영하면 때가 편을 든다","부침이 많으니 처음은 흉하고 끝은 길하다","일이 망설여지니 이루기 어렵다","마음이 어지러워 방향을 정하기 어렵다","구름이 반달을 가리니 파란이 숨어 있다","답답하고 괴로우니 모든 일이 펼쳐지기 어렵다","만물이 자라나는 번영의 모습","많은 일이 이루어지지 않으니 수고만 남는다","길운이 절로 오니 좋은 이름을 누릴 수 있다","안팎이 화목하지 않고 신용이 부족하다","모든 일이 뜻대로 되니 부귀가 절로 온다","선수를 놓치지 않으면 성공을 바랄 수 있다","동요하고 불안하니 역경에 빠지기 쉽다","참담하게 경영하니 가난을 면하기 어렵다","길흉이 반반이니 용기에 의지한다","얻었다가 다시 잃으니 평안하기 어렵다","안락이 절로 오니 자연히 길하다","지혜와 꾀가 없으면 성공을 바라기 어렵다","길 속에 흉이 있으니 나아가기보다 지키는 것이 낫다","크게 흉한 수, 파산의 모습","먼저 쓰고 뒤에 달콤하니 실패에 이르지 않는다","얻음과 잃음이 있으니 화려하나 실속이 없다","앞길에 빛이 없으니 희망이 크지 않다"],"matrix":{"gWealth":["바른 인연의 기운이 강해 감정이 안정되고 좋은 사람을 만나기 쉽다","일을 체계적으로 하니 실적이 안정되고 천천히 키울 수 있다","가정이 안정되고 아이가 말을 잘 들으니 함께 시간을 보내는 것이 좋다","정재의 기운이 강해 돈이 안정적으로 들어온다. 저축에 맞고 투기에는 맞지 않는다","몸의 바탕이 안정적이다. 밤샘으로 소모하지 않도록 한다","도와주는 사람은 많지 않지만 확실하고, 친구는 적어도 믿을 수 있다","연애에 진지하고 가볍게 놀지 않는다. 오래가는 관계에 맞다","부부가 한마음이니 돈과 감정이 한 방향으로 간다","학업이 안정되고 기억력이 좋다. 시험에서 실력을 발휘하기 쉽다","편재는 약하고 정재가 중심이다. 투자의 편재에 큰 기대를 걸지 않는다","장사는 정재의 기운이 있으니 천천히 하는 것이 좋다. 확장을 서두르지 않는다","도와주는 사람이 확실하고 작은 사람이 적다. 어려울 때 도와준다","성격이 실직하고 도리를 중시하며 기성이 온화하다","부모와 어른과의 관계가 안정되고 가족이 서로 돕는다","말싸움이 적고 시비에 휘말리기 어렵다. 도리로 말하면 풀린다","외출과 이사가 안정적이다. 타지에서도 정재의 기운이 있어 천천히 뿌리내릴 수 있다","돈과 실적, 사람을 대하는 서비스에 맞는 방향"],"gVital":["감정이 가볍고 주변의 도움이 있어 좋은 인연을 만나기 쉽다","귀인이 많고 기회도 많다. 커리어는 누군가 끌어 올려 주기 쉽다","가정이 화목하고 아이가 잘 이야기한다","돈이 가볍게 들어오고 귀인을 통한 기회도 많다. 욕심내지 않으면 좋다","기분이 좋으니 몸도 가볍다. 과식만 조심한다","사람들과 잘 지내고 친구가 많다. 어디를 가도 도움이 있다","연애가 즐겁고 서로 끌리며 지내기 쉽다","부부가 편하게 지내고 의논하며 진행하니 다툼이 적다","학업이 가볍고 스승과 귀인의 도움이 많다. 모르는 것은 물어보면 된다","편재는 귀인을 통해 오는 경우가 많지만 떠나는 것도 빠르다. 욕심내지 않는다","장사는 귀인이 많아 손님이 손님을 소개한다. 욕심내지 않는다","귀인이 많고 사람들과 잘 지내니 작은 사람이 가까이하기 어렵다","성격이 낙관적이고 사귀기 쉬우며 기성이 좋다","부모와 어른과 편하게 지내고 의논하며 진행할 수 있다","귀인이 많아 시비는 누군가 풀어 준다. 남의 다툼에 끼지 않는다","외출과 이사는 귀인이 많아 타지에서도 맞아 주는 사람이 있다","사람을 대하고 귀인의 인도를 받는 방향에 맞다"],"gCareer":["감정에 한결같아 한 번 정하면 흔들리지 않는다. 오래가는 관계에 맞다","능력이 뛰어나고 책임감이 있어 일에서 중용되기 쉽다","아이를 대하는 데 절도가 있어 엄격함과 도리를 겸한다","돈은 실력으로 벌고 수입이 안정적이다. 장기 경영에 맞다","몸은 튼튼하지만 장기간 소모하지 않는다. 쉴 시간을 남긴다","말을 지키니 친구가 믿고 관계가 안정적이다","연애에 진지하고 말보다 행동이 앞선다. 결혼에 맞다","부부가 서로 버텨 주니 집안의 크고 작은 일을 함께 맡는다","학업은 노력에 달렸다. 안정될수록 시험도 안정된다","편재는 실력과 장기 경영에서 온다. 하룻밤에 벌 것을 기대하지 않는다","장사는 실력과 평판으로 이루어진다. 장기 경영에 맞다","귀인은 당신의 실력을 높이 사니 작은 사람이 적다. 실력으로 말한다","성격에 책임감이 있고 한 말은 지킨다. 온화하지만 고집스러운 면도 있다","부모와 어른과 서로 버텨 주니 집안일을 함께 맡는다","규칙대로 행동하니 시비가 가까이하기 어렵다. 남을 위해 앞서지 않는다","외출과 이사는 실력에 달렸다. 타지에서도 장기 경영에 맞다","전문성과 기술로 먹고사는 방향에 맞다"],"gSteady":["감정이 서서히 데워지고 한 번 정하면 지킨다. 상대를 재촉하지 않는다","커리어는 안정을 중시한다. 지금 가진 것을 지키고 천천히 늘린다","아이에게 인내심이 많고 함께하는 시간이 많다. 천천히 가르치는 것이 맞다","돈을 잘 지키니 저축에 맞다. 투자처를 자주 바꾸지 않는다","몸은 안정적이지만 작은 불편함을 끌기 쉽다. 일찍 진료받는다","친구는 많지 않지만 오래간다. 관계가 안정적이다","연애가 서서히 데워지고 좋아하면 한결같다. 상대에게 답을 강요하지 않는다","부부는 잔잔히 오래가니 평범한 나날이 오히려 오래간다","학업이 서서히 데워진다. 순서대로 진행하고 진도를 서두르지 않는다","편재는 약하다. 원금을 지키고 바꾸기를 반복하지 않는 것이 좋다","장사는 한 가게를 지키는 것이 좋다. 분점을 서두르지 않는다","귀인은 많지 않지만 안정적이며 작은 사람도 적다. 자신의 울타리를 지키면 된다","성격이 서서히 데워지고 인내심이 많으며 온화하지만 한 생각에 갇히는 면도 있다","부모와 어른과는 잔잔히 오래가니 평범한 나날이 오히려 오래간다","시비가 적으니 자신의 일을 지키고 남의 다툼에 끼지 않는다","외출과 이사는 안정을 중시한다. 자리 옮김을 서두르지 않고 지금 가진 것을 지킨다","안정적이고 오래가며 변화가 적은 방향에 맞다"],"gRush":["감정이 급하게 오고 뜨거워지기 쉽다. 진정하고 나서 결정한다","과감히 도전하지만 커리어의 부침이 크다. 전부를 걸지 않는다","아이에게 급해지기 쉽다. 먼저 가라앉히고 나서 훈육한다","충동 소비가 많고 투자는 출입이 크게 오간다. 천천히 한다","감정의 기복이 커 수면에 영향을 주기 쉽다. 무리하지 않는다","말이 직설적이라 사람을 화나게 하기 쉽다. 급한 말일수록 천천히 한다","연애는 오는 것도 가는 것도 빠르다. 뜨거울 때 정하지 않는다","부부는 돈과 결정으로 다투기 쉽다. 먼저 진정하고 나서 이야기한다","학업의 부침이 크고 시험에서 충동적인 실수를 조심한다. 먼저 진정하고 제출한다","편재의 부침이 커 출입이 격렬하다. 시작하기 전에 한도를 정한다","장사는 과감하지만 부침이 크다. 전 자금을 한 번에 걸지 않는다","귀인이 적고 작은 사람에게 주의한다. 충동이 작은 사람에게 틈을 준다","성격이 과감하고 성미가 급하며 결정이 빠르다","부모와 어른과 급히 부딪히기 쉽다. 먼저 가라앉히고 나서 이야기한다","충동으로 말싸움을 부르기 쉽다. 결정하기 전에 진정한다. 시비에 주의한다","외출과 이사는 변화가 크다. 결정하기 전에 진정하고 뜨거울 때 정하지 않는다","과감하고 변화가 크며 수익도 부침이 있는 방향에 맞다"],"gChange":["감정이 변하기 쉽고 생각이 많다. 스스로를 겁주지 않는다","머리 회전이 빠르고 아이디어가 많다. 변화가 많은 일에 맞다. 이랬다저랬다 하지 않는다","아이의 아이디어가 많다. 많이 듣고 옛 방식으로 묶지 않는다","편재의 기회가 많지만 오는 것도 가는 것도 빠르다. 욕심내지 않는다","생각이 무겁고 잠이 얕다. 내려놓는 법을 배운다","친구는 오고 감이 많으니 진짜 친구는 시간을 두고 가려낸다","연애에서 생각이 많아 의심하기 쉽다. 결론 전에 분명히 묻는다","부부 사이는 서로 짐작하지 않는다. 말로 분명히 전한다","학업은 아이디어가 많아 변화 있는 학습법이 맞다. 이랬다저랬다 하지 않는다","편재는 기회가 많지만 변화도 커 출입이 빠르다. 욕심내지 않는다","장사는 변화가 많아 눈길을 바꾸거나 장소를 시험하는 것이 맞다. 이랬다저랬다 하지 않는다","귀인은 오고 감이 빠르고 작은 사람은 변화 속에서 나타나기 쉽다. 서명과 약속에 주의한다","성격은 아이디어가 많고 변하기 쉬우며 성미는 기분을 따른다","부모와 어른과는 생각이 다르다. 많이 듣고 말대꾸는 줄인다","변화가 많아 시비도 변화를 따라온다. 서명과 말로 한 약속에 주의한다","외출과 이사는 변화가 많고 타지의 기회도 많다. 물과 사람 정에 주의한다","머리 회전이 빠르고 아이디어가 많고 변화가 많은 방향에 맞다"],"gCharm":["이성에게 호감을 사기 쉽고 감정이 섬세하지만 생각이 많다","배려가 섬세해 사람을 대하는 일에 맞다. 생각이 많아 늦어지지 않도록 한다","아이에게 섬세하지만 생각이 너무 많지 않도록 한다. 먼저 함께하고 나서 요구한다","이성에서 오는 기회가 많지만 돈은 나눈다. 감정으로 돈을 흩뿌리지 않는다","생각이 무겁고 잠이 얕다. 내려놓는 법을 배운다","사람들과 잘 지내고 특히 이성에게 호감을 산다. 진짜 친구를 가려낸다","연애운이 왕성해 설레기 쉽다. 상대를 잘 보고 나서 마음을 넣는다","부부는 섬세하니 소통을 많이 하고 의심을 줄이는 것이 좋다","학업은 배려가 섬세하지만 생각이 많아 집중이 흩어진다. 먼저 기초를 다진다","편재는 인정이나 이성을 따라오기 쉽다. 기회와 인정을 나눈다","장사는 사람들과의 관계와 평판으로 이루어진다. 가게와 서비스를 정성껏 한다","귀인은 이성 친구에게 많고 작은 사람은 오해 속에 많다. 먼저 확인한다","성격이 섬세하고 생각이 많으며 성미는 부드럽지만 마음에 담아 두기 쉽다","부모와 어른과는 섬세한 정이 있으니 소통을 많이 하고 의심을 줄인다","생각이 많아 시비는 오해에서 생기기 쉽다. 먼저 확인한다","외출과 이사는 생각이 많고 타지에서 고향을 그리워하기 쉽다. 결정 전에 확인한다","섬세하고 품위가 있으며 사람을 대하는 방향에 맞다"],"gWords":["감정은 다투기 쉽고 그 대부분은 말에서 온다. 먼저 진정하고 나서 이야기한다","일에서는 말싸움과 시비가 많다. 적게 말하고 많이 행하는 것이 안정적이다","아이에게 말이 급해지기 쉽다. 아이의 말을 끝까지 듣고 나서 이야기한다","돈은 사교와 말로 나간다. 말을 삼가면 돈도 지킬 수 있다","말싸움과 걱정이 많아 수면에 영향을 주기 쉽다","말이 직설적이라 사람을 화나게 하기 쉽다. 귀인은 안정됨으로 되찾는다","연애에서는 말이 많고 다툼은 말에서 온다. 화난 말을 하지 않는다","부부의 다툼은 말에서 온다. 분명히 말하고 침묵으로 버티지 않는다","학업은 말싸움과 걱정에 방해받기 쉽다. 끼지 않고 책 읽을 시간을 남긴다","편재는 약하고 말싸움과 사교가 돈을 없앤다. 먼저 소비를 조인다","장사는 말싸움이 많고 손님과의 분쟁은 먼저 진정한다. 화난 말은 금물이다","작은 사람의 경향이 분명하다. 말싸움이 작은 사람을 부른다. 적게 말하고 많이 행한다","성격이 솔직하고 말재주가 있으며 성미가 빨리 불붙는다","부모와 어른에게 말이 급해지기 쉽다. 끝까지 듣고 나서 이야기한다","말싸움의 경향이 분명하다. 시비는 입에서 생긴다. 화난 말은 금물이다","외출과 이사는 말싸움이 많으니 계약과 약속을 먼저 확인한다","말재주와 도리를 살리고 시비에 끼지 않는 방향에 맞다"]},"aspectName":{"ganqing":"연애·감정","shiye":"일·커리어","qinzi":"부모와 자녀","caifu":"재물운","jiankang":"건강","renji":"인간관계","lianai":"연애운","fuqi":"부부 관계","xueye":"학업·시험","touzi":"투자·편재","chuangye":"창업·장사","guiren":"귀인과 작은 사람","xingge":"성격·성미","fumu":"부모·어른과의 관계","guansi":"소송·시비","chuxing":"외출·이사·타지 발전","hangye":"맞는 업계·직업 방향"},"aspectNoun":{"ganqing":"감정","shiye":"일","qinzi":"부모와 자녀 관계","caifu":"재물","jiankang":"건강","renji":"인간관계","lianai":"연애","fuqi":"부부 관계","xueye":"학업","touzi":"투자와 편재","chuangye":"장사","guiren":"귀인과 작은 사람","xingge":"성미","fumu":"부모와 어른과의 관계","guansi":"시비","chuxing":"외출과 이사","hangye":"직업 방향"},"liunianName":"연도 운세","briefTpl":{"good":"전체는 순조롭다. {noun}에 큰 저항이 없으니 자연스럽게 맡기면 된다","bad":"전체의 저항이 크다. {noun}에 주의하고 결정을 서두르지 않는다","mixed":"전체는 좋고 나쁨이 섞여 있다. {noun}은 먼저 안정시키고 나서 기회를 본다"},"briefSpecial":null,"overallSummary":{"good":"전체는 길하다 — {phrase}. 일은 대부분 순조롭게 흘러 귀인과 기회가 가까이 온다. 나날을 단단히 앞으로 밀기 좋다.","bad":"전체의 저항이 크다 — {phrase}. 행함에 주의하고 먼저 지키고 나서 나아가며 큰 결정을 서두르지 않는다. 안정이 가장 좋은 대응이다.","mixed":"전체는 좋고 나쁨이 섞여 있다 — {phrase}. 순조로운 곳은 지키고 막히는 곳은 주의한다. 리듬이 안정되면 좋은 부분이 자연히 이긴다."},"liunianBrief":{"daji":"좀처럼 없는 특별히 좋은 해이다. 기회는 예년보다 많다. 오래 생각해 온 일을 정식으로 일정에 올리기 좋다. 좋은 해일수록 단단히 잡는다.","ji":"전체적으로 순조로운 해이다. 일이 쉽게 모아지고 저항이 작다. 계획을 앞으로 밀기 좋으니 리듬을 안정시키면 좋은 결과가 온다.","xiong":"전체적으로 어려운 해이다. 저항이 많고 진행이 느리다. 걸음을 작게 하고 손에 든 것을 지키며 큰 결정을 서두르지 않는다. 견뎌 내는 것 자체가 전환점이 된다.","jiDaiXiong":"앞은 어렵고 뒤에 순조로워지는 해이다. 앞에서는 인내와 자중이 필요하고 전환점은 하반기에 있다. 상반기에 지킨 것이 하반기의 기회를 받아낸다.","xiongDaiJi":"해의 앞부분은 어렵지만 끝까지 어려운 것은 아니다. 지켜 내면 전환점이 온다. 작은 일을 단단히 하고 천천히 흐름의 변화를 기다린다."},"tones":{"0":"","1":"","2":"","3":"","4":"","5":"","6":"","7":"","8":"","9":"","10":"","11":"","12":"","13":"","14":"","15":"","16":"","17":"","18":"","19":"","20":"","21":"","22":"","23":"","24":"","25":"","26":"","27":"","28":"","29":"","30":"","31":"","32":"","33":"","34":"","35":"","36":"","37":"","38":"","39":"","40":"","41":"","42":"","43":"","44":"","45":"","46":"","47":"","48":"","49":"","50":"","51":"","52":"","53":"","54":"","55":"","56":"","57":"","58":"","59":"","60":"","61":"","62":"","63":"","64":"","65":"","66":"","67":"","68":"","69":"","70":"","71":"","72":"","73":"","74":"","75":"","76":"","77":"","78":"","79":""}}},"tones":["daji","ji","xiong","ji","xiong","ji","ji","ji","ji","xiong","xiong","ji","xiong","ji","xiong","ji","ji","ji","ji","xiong","xiong","ji","xiong","ji","ji","ji","xiong","xiongDaiJi","ji","ji","xiong","ji","ji","ji","xiong","ji","xiong","ji","xiongDaiJi","ji","jiDaiXiong","ji","jiDaiXiong","jiDaiXiong","xiong","ji","xiong","ji","ji","xiong","jiDaiXiong","jiDaiXiong","ji","jiDaiXiong","xiong","jiDaiXiong","xiong","ji","xiongDaiJi","xiong","xiong","jiDaiXiong","xiong","ji","xiong","ji","xiong","ji","ji","xiong","xiong","jiDaiXiong","xiong","ji","xiong","jiDaiXiong","xiong","jiDaiXiong","jiDaiXiong","xiong"]};
+
+/* ---------- UI strings (four languages) ---------- */
+var UI = {
+  zh: {
+    heroLines: ["你的手机号码", "藏着什么"],
+    gateHint: "轻拉开启",
+    openGate: "开启测算",
+    intro: "输入手机号码最后 4 位，免费看 18 个方面各一句简版；想看哪一方面详细版，单独点开解锁。这个号码陪你每天生活，它帮你，还是拖你，这里看清楚。",
+    sloganMain: "很多人不知道，你的手机号码决定了你的命运",
+    sloganSub: "输入最后 4 位，看看你的号码在说什么。",
+    digitLabel: function(i){ return "第 " + (i+1) + " 位数字"; },
+    digitsGroup: "手机号码最后四位",
+    yearLabel: "流年看",
+    yearSuffix: "年",
+    begin: "开始测算 · 免费",
+    calculating: "正在测算…",
+    fillHint: "填满 4 位数字就能开始",
+    onlyLast4: "只需最后 4 位，不用填完整号码。解读只供参考，不能保证结果。",
+    calcError: "测算没有成功，请再试一次。",
+    overallOf: function(l){ return "尾号 " + l + " 的整体"; },
+    ratingLabel: function(l){ return "整体评级：" + l; },
+    freeTitle: "简版 · 18 个方面",
+    bundleTitle: "全包 · 全部详细版",
+    bundleDesc: function(n){ return "一次解锁全部 " + n + " 项详细版：17 个方面（每项 120-180 字）加流年完整解读（约 600 字），还有整体感觉、强弱分析。"; },
+    bundlePriceNote: function(b,s,save){ return "全包 " + b + " · 单买合计 " + s + " · 省 " + save; },
+    bundleIncludes: "整体感觉 / 强弱分析（全包附赠）",
+    detailFor: function(n){ return n + " · 详细版"; },
+    checkoutAspect: function(p){ return "Checkout · " + p; },
+    checkoutLiunian: function(p){ return "Checkout · " + p; },
+    checkoutBundle: function(p){ return "Checkout · " + p; },
+    lockedTag: "详细版未解锁",
+    unlockedTag: "详细版已解锁",
+    paidBanner: "付款已完成，这一版已为你解锁。",
+    paidRecover: "付款已完成，但这个浏览器里找不到付款前保存的购买记录，详细版没能自动打开。解锁记录保存在付款时用的浏览器里，请用同一个浏览器打开本站；仍打不开时，请保留 Stripe 的付款凭证联系站长处理。",
+    aspectDetailOpen: {
+      good: "{brief}。这一面落在你整体格局偏顺的一侧，底子在、路是通的，差的只是有没有持续去做。把这股劲用在日常的小事上，时间长了，这一面会慢慢变成你最稳的底气。",
+      mixed: "{brief}。这一面有顺也有卡，关键不在运气，而在节奏：顺的时候别贪多，卡的时候别硬冲。把这一面当成需要长期经营的一块，稳住基本盘，比一时冲快更重要。",
+      bad: "{brief}。这一面眼下偏弱，不代表做不成，而是提醒你先补短板、慢一点。越是这一面弱，越忌急着证明自己；先把小事做扎实，等势头回转，这一面反而最容易后来居上。"
+    },
+    aspectDetailAdvice: {
+      good: "建议：这一面适合主动一点，机会来了就接，别等完美时机；同时留一点余地，别把好势头一次用完。",
+      mixed: "建议：这一面宜守宜攻各一半，先定一个小目标，做到了再加码；遇到反复也别全盘否定自己。",
+      bad: "建议：这一面先守后攻，重要的决定多问一句可靠的人，钱和承诺都别一次押满，稳住了再谈下一步。"
+    },
+    lnPhraseLine: function(y, p){ return y + " 年的流年原话是「" + p + "」。"; },
+    lnSecOverall: "全年总论", lnSecFirst: "上半年", lnSecSecond: "下半年", lnSecSeasons: "四季", lnSecDo: "宜", lnSecDont: "忌", lnSecKeys: "重点提醒",
+    lnFirst: {
+      good: "上半年势头顺，适合把重要的事先做，把基础打牢，钱和感情都先稳住。",
+      mixed: "上半年先难后稳，前面别急着铺大摊子，先把小事做好，稳住了再往前推。",
+      bad: "上半年阻力大，重要的事先放一放，把小事做好；别贪多，一次做太多反而乱。"
+    },
+    lnSecond: {
+      good: "下半年延续顺势，前面做好的事会慢慢见效，适合收成果，再定下一个目标。",
+      mixed: "下半年先守后看，前面守住了，后面才有转机，计划放小一点，一步一步来。",
+      bad: "下半年先守后看，前面守住了，后面才有转机；把身体顾好，多和可靠的人商量，稳住了事情才顺。"
+    },
+    lnSeasons: {
+      good: ["春：开头顺，重要的事先做。", "夏：继续顺，适合多做一点。", "秋：收获季，前面做的事见效。", "冬：守住成果，准备新一年。"],
+      mixed: ["春：先稳住，别急着开局。", "夏：一件一件来，别贪多。", "秋：回头检查，该补的补上。", "冬：休息蓄力，准备再出发。"],
+      bad: ["春：先把小事做好。", "夏：别贪多，一件一件来。", "秋：稳住，别跟人比。", "冬：好好休息，准备再出发。"]
+    },
+    lnDo: {
+      good: ["宜存钱，顺的时候也要留余地。", "宜把重要的事先做，别拖。", "宜主动一点，好事靠自己去接。"],
+      mixed: ["宜先把手头的事做扎实。", "宜多问可靠的人，多听意见。", "宜存钱，先守住手里的钱。"],
+      bad: ["宜多问可靠的人，多听熟人的意见。", "宜早睡早起，把身体先顾好。", "宜存钱，先守住手里的钱。", "宜把手头的事做扎实，再谈下一步。"]
+    },
+    lnDont: {
+      good: ["忌贪多，一次做太多反而乱。", "忌乱花钱，顺的时候也要守住钱。", "忌说气话，别一句话坏了好局面。"],
+      mixed: ["忌冲动花钱，别一次押大钱。", "忌听风就是雨，做决定前先冷一冷。", "忌熬夜透支，身体垮了什么都做不成。"],
+      bad: ["忌贪功好进、急着扩张，没站稳别开新局。", "忌跟别人比快，比快最容易乱了节奏。", "忌冲动花钱，别一次押大钱。", "忌熬夜透支，身体垮了什么都做不成。"]
+    },
+    lnKeys: {
+      good: ["钱：钱来得顺，存下来比赚快更重要。", "感情：感情顺，多商量，好事两个人一起守。", "健康：健康稳，别熬夜，身体好了才有力气。"],
+      mixed: ["钱：钱先稳住，存下来比赚快更重要。", "感情：感情先稳住，少吵架，多商量。", "健康：健康先顾好，别熬夜，别硬撑。"],
+      bad: ["钱：这一年钱先稳住，存下来比赚快更重要。", "感情：感情先稳住，少吵架，多商量。", "健康：健康先顾好，别熬夜，别硬撑，身体稳了才有力气。"]
+    },
+    bundleBonusTitle: "整体感觉 · 强弱分析",
+    bundleBonus: function(phrase, label){ return "整体原话是「" + phrase + "」，评级" + label + "。强弱看三组两两组合落在哪些能量上：顺的面多用，弱的面先守，这就是这个号码这一阶段的用法。全包解锁后，17 个方面和流年都可以在下面逐项看。"; },
+    liunianDetailNote: "详细版包含全年总论、上半年、下半年、四季、宜忌和重点提醒，约 600 字。",
+    soonTitle: "真实支付即将开通",
+    soonBody: function(price){ return "这一项 " + price + "。真实支付即将开通，现在点 Checkout 不会在线扣款，也不会记录成已付款。等在线支付接通后，在收银台付款成功、页面转回来，就会自动解锁这一项详细版。"; },
+    closeBtn: "知道了",
+    disclaimer: "本站解读根据你的号码综合测算，只供参考和娱乐，不能保证任何结果。投资、健康、官司等方面只讲倾向，不作具体建议和定论；遇到具体事情，请结合自己的实际情况决定。",
+    rulesTitle: "免责与规则",
+    rules: [
+      "付费购买的是这份解读内容，不是改运服务：付款不会改变运势，解读也不承诺带来好运或改变结果。",
+      "本解读不涉及医疗建议，也不涉及投资建议；健康、投资、官司等方面只讲倾向，不作诊断、建议或定论。",
+      "退款规则：详细版一旦解锁查看，内容即已交付，看完不能退款；如付款后尚未查看就遇到问题，请联系站长处理。"
+    ],
+    newReading: "测另一个号码",
+    svcTitle: "改电话号码服务",
+    svcNew: "新服务",
+    svcDesc: "根据你的生日，为你挑选一个更旺的号码参考。先告诉我们你想重点旺哪一方面，我们按你的生日和需求来配号，你再决定要不要换。",
+    svcPriceNote: "一次性收费",
+    svcNeedsTitle: "需要你提供",
+    svcNeeds: ["生日", "性别", "现在的手机号", "想旺哪方面：事业 / 感情 / 财富 / 其他（可自填）", "接收号码的邮箱"],
+    svcDelivery: "付费后 3 天内交付，号码发到你的邮箱。",
+    svcNoPromise: "号码只供参考，不承诺一定带来好运，也不保证改变结果。",
+    svcBirthday: "生日",
+    svcGender: "性别",
+    svcFemale: "女",
+    svcMale: "男",
+    svcPhone: "现在的手机号",
+    svcPhonePh: "输入现在的完整手机号",
+    svcFocus: "想旺哪方面",
+    svcFocusCareer: "事业",
+    svcFocusLove: "感情",
+    svcFocusWealth: "财富",
+    svcFocusOther: "其他",
+    svcFocusOtherLabel: "你想旺什么？",
+    svcFocusOtherPh: "例如：健康、学业、人缘…",
+    svcEmail: "接收号码的邮箱",
+    svcEmailPh: "name@example.com",
+    svcSubmit: function(p){ return "Checkout 付款 · " + p; },
+    svcFillError: "请先填完生日、性别、现在的手机号、想旺的方面和邮箱，再提交。",
+    svcReceivedTitle: "申请已收到",
+    svcReceivedBody: function(email){ return "申请已收到，3 天内会把配好的号码发到你填写的邮箱" + (email ? "（" + email + "）" : "") + "，请留意收件箱。"; },
+    svcSoonBody: function(price){ return "这项服务 " + price + "，一次性收费。付款通道正在接入中，目前暂未收款，也不会先行交付。接通之后，在这里付款并提交上面的资料，付费后 3 天内会把号码发到你的邮箱。"; }
+  },
+  en: {
+    heroLines: ["What does your phone number", "hold for you"],
+    gateHint: "Pull gently to begin",
+    openGate: "Begin the reading",
+    intro: "Enter the last 4 digits of your phone number. Read one line for each of 18 areas, free. Unlock any single area's detailed reading on its own. The number that lives with you every day — does it help you, or hold you back? See it clearly here.",
+    sloganMain: "Most people don't know \u2014 your phone number decides your destiny.",
+    sloganSub: "Enter the last 4 digits and see what your number says about you.",
+    digitLabel: function(i){ return "Digit " + (i+1); },
+    digitsGroup: "Last four digits of your phone number",
+    yearLabel: "Yearly fortune for",
+    yearSuffix: "",
+    begin: "Begin · Free",
+    calculating: "Reading…",
+    fillHint: "Fill all 4 digits to begin",
+    onlyLast4: "Only the last 4 digits — never your full number. Readings are for reference only and guarantee nothing.",
+    calcError: "The reading didn't go through. Please try again.",
+    overallOf: function(l){ return "Overall for ····" + l; },
+    ratingLabel: function(l){ return "Overall rating: " + l; },
+    freeTitle: "Brief · 18 areas",
+    bundleTitle: "Full bundle · Every detailed reading",
+    bundleDesc: function(n){ return "Unlock all " + n + " detailed readings at once: 17 areas (120–180 words each) plus the complete yearly reading (about 600 words), with the overall impression and strength/weakness analysis included."; },
+    bundlePriceNote: function(b,s,save){ return "Bundle " + b + " · Separately " + s + " · You save " + save; },
+    bundleIncludes: "Overall impression & strength analysis (bundle bonus)",
+    detailFor: function(n){ return n + " · Detailed"; },
+    checkoutAspect: function(p){ return "Checkout · " + p; },
+    checkoutLiunian: function(p){ return "Checkout · " + p; },
+    checkoutBundle: function(p){ return "Checkout · " + p; },
+    lockedTag: "Detailed reading locked",
+    unlockedTag: "Detailed · unlocked",
+    paidBanner: "Payment complete — this detailed reading is now unlocked for you.",
+    paidRecover: "Payment complete, but no purchase record saved before checkout was found in this browser, so the detailed reading could not open automatically. Unlocks are stored in the browser used at checkout — please open this site in that same browser. If it still does not open, keep your Stripe payment receipt and contact the site owner.",
+    aspectDetailOpen: {
+      good: "{brief}. This area sits on the smoother side of your overall pattern: the foundation is there and the path is open; what matters is steady follow-through. Used in small daily steps, this becomes one of your most reliable strengths.",
+      mixed: "{brief}. This area mixes smooth stretches with sticking points. The key is pace, not luck: do not overreach when it flows, and do not force it when it sticks. Treat it as something to build over time.",
+      bad: "{brief}. This area is weaker for now — not a dead end, but a reminder to shore up the basics and slow down. The weaker it is, the more you should avoid rushing to prove yourself; do the small things solidly first."
+    },
+    aspectDetailAdvice: {
+      good: "Advice: lean in a little — take opportunities when they come instead of waiting for a perfect moment, but keep some reserve and do not spend the good momentum all at once.",
+      mixed: "Advice: half hold, half advance. Set one small goal, reach it, then add more; a setback here is not a verdict on the whole area.",
+      bad: "Advice: hold first, advance later. Ask a trusted person before big decisions, and do not stake all your money or promises at once."
+    },
+    lnPhraseLine: function(y, p){ return "The original line for " + y + " is: \u201c" + p + "\u201d. "; },
+    lnSecOverall: "The year as a whole", lnSecFirst: "First half", lnSecSecond: "Second half", lnSecSeasons: "Four seasons", lnSecDo: "Favour", lnSecDont: "Avoid", lnSecKeys: "Key reminders",
+    lnFirst: {
+      good: "The first half runs smoothly — do the important things first and lay the foundation; keep money and relationships steady.",
+      mixed: "The first half starts rough, then steadies. Do not open a big new front early on; do the small things well first.",
+      bad: "The first half meets real resistance. Put big moves aside, do the small things well, and do not take on too much at once."
+    },
+    lnSecond: {
+      good: "The second half keeps the momentum — earlier work starts to pay off. Harvest what you built, then set the next goal.",
+      mixed: "The second half is hold first, then watch: what you protected early leaves room for a turn later. Keep plans small, step by step.",
+      bad: "The second half is hold first, then watch: what you protected early leaves room for a turn later. Look after your health and talk things over with people you trust."
+    },
+    lnSeasons: {
+      good: ["Spring: a smooth start — do the important things first.", "Summer: keep going — a good time to do a little more.", "Autumn: harvest — earlier work shows results.", "Winter: keep the gains and prepare for the new year."],
+      mixed: ["Spring: steady first, do not rush the opening.", "Summer: one thing at a time, do not overreach.", "Autumn: review and patch what is missing.", "Winter: rest, store energy, get ready to go again."],
+      bad: ["Spring: do the small things well first.", "Summer: do not overreach — one thing at a time.", "Autumn: hold steady; do not compare yourself with others.", "Winter: rest properly and prepare to set out again."]
+    },
+    lnDo: {
+      good: ["Save money — keep a reserve even when things go well.", "Do the important things first; do not put them off.", "Be proactive — good things still need you to reach for them."],
+      mixed: ["Make what is already in hand solid first.", "Ask people you trust, and listen to their advice.", "Save first — protect the money you have."],
+      bad: ["Ask people you trust, and listen to those who know you.", "Sleep early and rise early — look after your body first.", "Save first — protect the money you have.", "Make what is in hand solid before talking about the next step."]
+    },
+    lnDont: {
+      good: ["Do not overreach — too much at once creates chaos.", "Do not spend carelessly — guard your money even in good times.", "Do not speak in anger — one sentence can spoil a good situation."],
+      mixed: ["Do not spend on impulse or stake a large sum at once.", "Do not act on every rumour — cool down before deciding.", "Do not burn out at night — if your health breaks, nothing gets done."],
+      bad: ["Do not chase quick merit or rush to expand — do not open a new front before you are standing firm.", "Do not race other people — racing is what breaks your rhythm.", "Do not spend on impulse or stake a large sum at once.", "Do not burn out at night — if your health breaks, nothing gets done."]
+    },
+    lnKeys: {
+      good: ["Money: money comes smoothly this year; saving it matters more than earning it fast.", "Love: relationships run smoothly — talk things through and guard the good together.", "Health: health is steady; do not stay up late, and a sound body gives you strength."],
+      mixed: ["Money: keep money steady first; saving matters more than earning fast.", "Love: keep the relationship steady — fewer quarrels, more talking.", "Health: look after your health first; do not stay up late or push through."],
+      bad: ["Money: keep money steady this year; saving matters more than earning it fast.", "Love: keep the relationship steady — fewer quarrels, more talking it through.", "Health: look after your health first; do not stay up late or push through — a steady body gives you strength."]
+    },
+    bundleBonusTitle: "Overall feel · Strengths & weaknesses",
+    bundleBonus: function(phrase, label){ return "The overall line is \u201c" + phrase + "\u201d (rating: " + label + "). Strengths and weaknesses come from where your three digit-pairs land: lean on the smooth areas, guard the weak ones first. With the bundle unlocked, all 17 aspects and the yearly reading below are open to read one by one."; },
+    liunianDetailNote: "The detailed version covers the whole year, both halves, the four seasons, do's and don'ts, and key reminders — about 600 words.",
+    soonTitle: "Real payment coming soon",
+    soonBody: function(price){ return "This item is " + price + ". Real online payment is coming soon — tapping Checkout now will not charge you online, and nothing will be recorded as paid. Once payment is live, you pay at checkout, and when the page returns after a successful payment, this detailed reading unlocks automatically."; },
+    closeBtn: "Got it",
+    disclaimer: "Readings on this site are drawn from your number as a whole, for reference and entertainment only, and guarantee no outcome. For investments, health, and legal matters they speak of tendencies only — not advice or conclusions. For real decisions, weigh your own circumstances.",
+    rulesTitle: "Disclaimer & rules",
+    rules: [
+      "What you pay for is the reading content itself, not a luck-changing service: paying does not change your fortune, and the reading promises no improvement in outcomes.",
+      "These readings are not medical advice and not investment advice. For health, investments, and legal matters they speak of tendencies only — no diagnoses, recommendations, or conclusions. Please consult a professional for specific matters.",
+      "Refund rule: once a detailed reading has been unlocked and viewed, the content has been delivered and cannot be refunded. If you paid but have not viewed it and something went wrong, please contact the owner."
+    ],
+    newReading: "Read another number",
+    svcTitle: "Change Your Phone Number",
+    svcNew: "New",
+    svcDesc: "Based on your birthday, we pick a more prosperous number for you to consider. Tell us which area you most want to boost first, and we match a number to your birthday and your focus — then you decide whether to switch.",
+    svcPriceNote: "One-time fee",
+    svcNeedsTitle: "What we need from you",
+    svcNeeds: ["Your birthday", "Your gender", "Your current phone number", "What you want to boost: career / love / wealth / other (tell us)", "An email address to receive the number"],
+    svcDelivery: "Delivered within 3 days after payment, sent to your email.",
+    svcNoPromise: "The number is for reference only. It does not promise good luck or guarantee any change in outcomes.",
+    svcBirthday: "Birthday",
+    svcGender: "Gender",
+    svcFemale: "Female",
+    svcMale: "Male",
+    svcPhone: "Current phone number",
+    svcPhonePh: "Enter your full current number",
+    svcFocus: "What do you want to boost?",
+    svcFocusCareer: "Career",
+    svcFocusLove: "Love",
+    svcFocusWealth: "Wealth",
+    svcFocusOther: "Other",
+    svcFocusOtherLabel: "What would you like to boost?",
+    svcFocusOtherPh: "e.g. health, studies, popularity…",
+    svcEmail: "Email to receive the number",
+    svcEmailPh: "name@example.com",
+    svcSubmit: function(p){ return "Checkout · " + p; },
+    svcFillError: "Please complete your birthday, gender, current phone number, focus area, and email before submitting.",
+    svcReceivedTitle: "Request received",
+    svcReceivedBody: function(email){ return "Your request has been received. Your matched number will be sent within 3 days to the email you entered" + (email ? " (" + email + ")" : "") + " — please check your inbox."; },
+    svcSoonBody: function(price){ return "This service is " + price + ", a one-time fee. The payment channel is still being connected, so no payment is being taken yet and nothing is delivered in advance. Once it is live, pay and submit the details above here, and your number will be sent to your email within 3 days after payment."; }
+  },
+  ja: {
+    heroLines: ["あなたの携帯番号には", "何が潜んでいる"],
+    gateHint: "軽く引いて開く",
+    openGate: "鑑定を始める",
+    intro: "携帯番号の下4桁を入力すると、18の面について各一文の簡易版が無料で読めます。詳しく知りたい面は、一つずつ詳細版を開けます。毎日一緒にいるこの番号は、あなたを助けているのか、足を引っ張っているのか——ここではっきり見てみましょう。",
+    sloganMain: "多くの人が知らない——あなたの携帯番号が、あなたの運命を決めている。",
+    sloganSub: "下4桁を入力して、あなたの番号が何を語っているか見てみましょう。",
+    digitLabel: function(i){ return (i+1) + "桁目の数字"; },
+    digitsGroup: "携帯番号の下4桁",
+    yearLabel: "流年は",
+    yearSuffix: "年",
+    begin: "鑑定を始める · 無料",
+    calculating: "鑑定中…",
+    fillHint: "4桁すべて入力すると始められます",
+    onlyLast4: "必要なのは下4桁だけです。番号全体は不要です。解釈は参考であり、結果を保証するものではありません。",
+    calcError: "鑑定が成功しませんでした。もう一度お試しください。",
+    overallOf: function(l){ return "下4桁 " + l + " の全体"; },
+    ratingLabel: function(l){ return "全体評価：" + l; },
+    freeTitle: "簡易版 · 18の面",
+    bundleTitle: "全てセット · 詳細版全部",
+    bundleDesc: function(n){ return "詳細版 " + n + " 項目を一度に開きます。17の面（各120-180字）と流年の完全な解釈（約600字）、さらに全体の印象と強み・弱みの分析付き。"; },
+    bundlePriceNote: function(b,s,save){ return "セット " + b + " · 個別合計 " + s + " · " + save + " お得"; },
+    bundleIncludes: "全体の印象／強み・弱みの分析（セット特典）",
+    detailFor: function(n){ return n + " · 詳細版"; },
+    checkoutAspect: function(p){ return "Checkout · " + p; },
+    checkoutLiunian: function(p){ return "Checkout · " + p; },
+    checkoutBundle: function(p){ return "Checkout · " + p; },
+    lockedTag: "詳細版は未解錠",
+    unlockedTag: "詳細版・解放済み",
+    paidBanner: "お支払いが完了し、この詳細版が開きました。",
+    paidRecover: "お支払いは完了していますが、このブラウザには購入記録が見つからず、詳細版を自動で開けませんでした。解錠記録は支払い時のブラウザに保存されます。同じブラウザで本サイトを開いてください。それでも開かない場合は、Stripe の支払い控えを保管し、サイト運営者へご連絡ください。",
+    aspectDetailOpen: {
+      good: "{brief}。この面は全体の流れの中でも順調な側にあります。土台はあり、道は開けています。大切なのは続けること。日々の小さな一歩に使えば、やがて一番頼れる強みになります。",
+      mixed: "{brief}。この面は順調な時期と詰まる時期が混ざっています。鍵は運ではなくペースです。順調なときに欲張らず、詰まったときに無理をしないこと。時間をかけて育てる面として向き合ってください。",
+      bad: "{brief}。この面は今は弱めです。できないのではなく、まず弱点を補い、ゆっくり進めという合図です。弱い面ほど、急いで証明しようとしないこと。小さなことを丁寧に固めるのが先です。"
+    },
+    aspectDetailAdvice: {
+      good: "アドバイス：少し積極的に。完璧な時を待たず、機会が来たらつかんでください。ただし余力は残し、良い流れを一度に使い切らないこと。",
+      mixed: "アドバイス：守りと攻めは半分ずつ。小さな目標を一つ決め、できたら次を足すこと。つまずいても、この面全体を否定しないでください。",
+      bad: "アドバイス：先に守り、後で攻め。大きな決断の前に信頼できる人に聞き、お金も約束も一度に賭けないこと。"
+    },
+    lnPhraseLine: function(y, p){ return y + "年の流年の原文は「" + p + "」です。"; },
+    lnSecOverall: "年全体", lnSecFirst: "上半期", lnSecSecond: "下半期", lnSecSeasons: "四季", lnSecDo: "宜", lnSecDont: "忌", lnSecKeys: "重点の注意",
+    lnFirst: {
+      good: "上半期は順調です。大切なことを先に進め、土台を固めましょう。お金と人間関係はまず安定を。",
+      mixed: "上半期は先に難しく、後で安定します。最初から大きく広げず、小さなことを丁寧に。",
+      bad: "上半期は抵抗が大きい時期です。大切なことは一旦置き、小さなことを丁寧に。一度に多くを抱えないこと。"
+    },
+    lnSecond: {
+      good: "下半期も流れは続き、前半の積み重ねが実を結びます。成果を受け取り、次の目標を決めましょう。",
+      mixed: "下半期は先に守り、後で様子を見る時期。前半に守った分だけ、後半に転機が来ます。計画は小さく、一歩ずつ。",
+      bad: "下半期は先に守り、後で様子を見る時期。前半に守った分だけ転機があります。体を大切にし、信頼できる人と相談を。"
+    },
+    lnSeasons: {
+      good: ["春：滑り出しは順調、大切なことを先に。", "夏：流れが続く、少し多めに進めてよい時期。", "秋：収穫の季、前半の努力が実ります。", "冬：成果を守り、新しい年への準備を。"],
+      mixed: ["春：まず安定、開局を急がない。", "夏：一つずつ、欲張らない。", "秋：振り返って、足りない所を補う。", "冬：休んで力を蓄え、再出発の準備を。"],
+      bad: ["春：まず小さなことを丁寧に。", "夏：欲張らず、一つずつ。", "秋：安定を保ち、人と比べない。", "冬：しっかり休み、再出発の準備を。"]
+    },
+    lnDo: {
+      good: ["貯めること。順調なときも余力を残す。", "大切なことを先にし、後回しにしない。", "少し積極的に。良いことは自分からつかみにいく。"],
+      mixed: ["まず手元のことを丁寧に固める。", "信頼できる人に聞き、意見を取り入れる。", "まず貯めて、手元のお金を守る。"],
+      bad: ["信頼できる人に聞き、身近な人の意見を大切に。", "早寝早起き、まず体を整える。", "まず貯めて、手元のお金を守る。", "手元のことを固めてから、次の一歩を考える。"]
+    },
+    lnDont: {
+      good: ["一度に多くを抱えない。欲張ると乱れる。", "順調なときも無駄遣いせず、お金を守る。", "怒った言葉を言わない。一言で良い流れが壊れる。"],
+      mixed: ["衝動買いをしない。大きなお金を一度に賭けない。", "噂に振り回されず、決める前に一度冷静に。", "夜更かしで無理をしない。体が壊れれば何もできない。"],
+      bad: ["功を焦って急がない。地盤が固まる前に広げない。", "人と速さを競わない。競うとリズムが崩れる。", "衝動買いをしない。大きなお金を一度に賭けない。", "夜更かしで無理をしない。体が壊れれば何もできない。"]
+    },
+    lnKeys: {
+      good: ["お金：今年はお金の流れが順調。速く稼ぐより、貯めることが大切。", "感情：感情は順調。よく話し合い、良い流れを二人で守る。", "健康：健康は安定。夜更かしせず、体が整えば力が出る。"],
+      mixed: ["お金：まず安定を。速く稼ぐより貯めることが大切。", "感情：まず安定を。喧嘩を減らし、よく話し合う。", "健康：まず体を整える。夜更かしせず、無理をしない。"],
+      bad: ["お金：今年はお金をまず安定させる。速く稼ぐより貯めることが大切。", "感情：感情はまず安定を。喧嘩を減らし、よく話し合う。", "健康：まず体を整える。夜更かしせず、無理をしない。体が安定すれば力が出る。"]
+    },
+    bundleBonusTitle: "全体の感触・強みと弱み",
+    bundleBonus: function(phrase, label){ return "全体の原文は「" + phrase + "」、評定は" + label + "です。強みと弱みは、3組の数字の組み合わせがどのエネルギーに落ちるかで見ます。順調な面を使い、弱い面はまず守る。全パック解放後は、下の17の面と流年を一つずつ読めます。"; },
+    liunianDetailNote: "詳細版には年全体、上半期、下半期、四季、宜・忌、重点の注意が含まれます。約600字。",
+    soonTitle: "実際の決済は近日公開",
+    soonBody: function(price){ return "この項目は " + price + " です。実際のオンライン決済は近日公開予定です。今 Checkout を押してもオンラインで課金されることはなく、支払い済みとして記録されることもありません。決済が開通したら、レジでお支払いを完了し、ページが戻ると、この詳細版が自動で開きます。"; },
+    closeBtn: "分かりました",
+    disclaimer: "本サイトの解釈は、あなたの番号から総合的に鑑定したもので、参考と娯楽のためのものです。結果を保証するものではありません。投資・健康・裁判などについては傾向を示すのみで、具体的な助言や結論ではありません。具体的なことは、ご自身の状況に合わせて判断してください。",
+    rulesTitle: "免責と規則",
+    rules: [
+      "お支払いはこの解釈の内容そのものに対するものであり、運気を変えるサービスではありません。支払いによって運が変わることはなく、解釈が結果の改善を約束するものでもありません。",
+      "本解釈は医療上の助言ではなく、投資の助言でもありません。健康・投資・裁判などについては傾向を示すのみで、診断・推奨・結論ではありません。具体的なことは専門家にご相談ください。",
+      "返金規則：詳細版は一度開いて閲覧すると、内容はすでに提供済みのため返金できません。支払い後にまだ閲覧しておらず問題がある場合は、店主までご連絡ください。"
+    ],
+    newReading: "別の番号を鑑定する",
+    svcTitle: "携帯番号を変えるサービス",
+    svcNew: "新サービス",
+    svcDesc: "あなたの誕生日に合わせて、より縁起の良い番号の候補を選びます。まず特に伸ばしたい面を教えてください。誕生日とご希望に合わせて番号を選び、変えるかどうかはあなたが決められます。",
+    svcPriceNote: "一回払い",
+    svcNeedsTitle: "ご提供いただく情報",
+    svcNeeds: ["生年月日", "性別", "今お使いの携帯番号", "伸ばしたい面：仕事 / 恋愛 / 金運 / その他（自由記入）", "番号を受け取るメールアドレス"],
+    svcDelivery: "お支払い後3日以内に、メールでお届けします。",
+    svcNoPromise: "番号は参考のためのものです。幸運を約束したり、結果が変わることを保証したりするものではありません。",
+    svcBirthday: "生年月日",
+    svcGender: "性別",
+    svcFemale: "女性",
+    svcMale: "男性",
+    svcPhone: "今の携帯番号",
+    svcPhonePh: "今お使いの番号を全部入力",
+    svcFocus: "伸ばしたい面",
+    svcFocusCareer: "仕事",
+    svcFocusLove: "恋愛",
+    svcFocusWealth: "金運",
+    svcFocusOther: "その他",
+    svcFocusOtherLabel: "何を伸ばしたいですか？",
+    svcFocusOtherPh: "例：健康、学業、人間関係…",
+    svcEmail: "番号を受け取るメールアドレス",
+    svcEmailPh: "name@example.com",
+    svcSubmit: function(p){ return "Checkout で支払う · " + p; },
+    svcFillError: "生年月日、性別、今の携帯番号、伸ばしたい面、メールアドレスをすべて入力してから送信してください。",
+    svcReceivedTitle: "お申し込みを受け付けました",
+    svcReceivedBody: function(email){ return "お申し込みを受け付けました。選んだ番号は3日以内に、ご入力のメールアドレス" + (email ? "（" + email + "）" : "") + "へお送りします。受信箱をご確認ください。"; },
+    svcSoonBody: function(price){ return "このサービスは " + price + " の一回払いです。決済チャネルは現在接続中のため、まだお支払いは受け付けておらず、先行してお届けすることもありません。開通後はここでお支払いと上記の情報の送信ができ、お支払い後3日以内にメールで番号をお送りします。"; }
+  },
+  ko: {
+    heroLines: ["당신의 휴대폰 번호에는", "무엇이 숨어 있을까"],
+    gateHint: "가볍게 당겨 열기",
+    openGate: "감정 시작하기",
+    intro: "휴대폰 번호 마지막 4자리를 입력하면 18개 면에 대해 한 문장씩 무료로 볼 수 있습니다. 자세히 보고 싶은 면은 하나씩 상세판을 열 수 있습니다. 매일 함께하는 이 번호가 당신을 돕고 있는지, 발목을 잡고 있는지, 여기서 분명히 보세요.",
+    sloganMain: "많은 사람이 모릅니다 — 당신의 휴대폰 번호가 당신의 운명을 결정합니다.",
+    sloganSub: "마지막 4자리를 입력하고, 당신의 번호가 무엇을 말하는지 확인해 보세요.",
+    digitLabel: function(i){ return (i+1) + "번째 숫자"; },
+    digitsGroup: "휴대폰 번호 마지막 네 자리",
+    yearLabel: "연도 운세는",
+    yearSuffix: "년",
+    begin: "감정 시작 · 무료",
+    calculating: "감정 중…",
+    fillHint: "4자리를 모두 채우면 시작할 수 있습니다",
+    onlyLast4: "마지막 4자리만 필요하고 전체 번호는 필요 없습니다. 해석은 참고용이며 결과를 보장하지 않습니다.",
+    calcError: "감정이 성공하지 않았습니다. 다시 시도해 주세요.",
+    overallOf: function(l){ return "마지막 " + l + "의 전체"; },
+    ratingLabel: function(l){ return "전체 평가: " + l; },
+    freeTitle: "간단판 · 18개 면",
+    bundleTitle: "전체 묶음 · 상세판 전부",
+    bundleDesc: function(n){ return "상세판 " + n + "개 항목을 한 번에 엽니다. 17개 면(각 120-180자)과 연도 운세 완전 해석(약 600자), 그리고 전체 인상과 강약 분석이 포함됩니다."; },
+    bundlePriceNote: function(b,s,save){ return "묶음 " + b + " · 낱개 합계 " + s + " · " + save + " 절약"; },
+    bundleIncludes: "전체 인상 / 강약 분석(묶음 특전)",
+    detailFor: function(n){ return n + " · 상세판"; },
+    checkoutAspect: function(p){ return "Checkout · " + p; },
+    checkoutLiunian: function(p){ return "Checkout · " + p; },
+    checkoutBundle: function(p){ return "Checkout · " + p; },
+    lockedTag: "상세판 잠김",
+    unlockedTag: "상세판 열람 가능",
+    paidBanner: "결제가 완료되어 이 상세판이 열렸습니다.",
+    paidRecover: "결제는 완료되었지만 이 브라우저에서 구매 기록을 찾지 못해 상세 해석이 자동으로 열리지 않았습니다. 잠금 해제 기록은 결제할 때 사용한 브라우저에 저장되니 같은 브라우저에서 이 사이트를 열어 주세요. 그래도 열리지 않으면 Stripe 결제 영수증을 보관하고 사이트 운영자에게 문의해 주세요.",
+    aspectDetailOpen: {
+      good: "{brief}. 이 면은 전체 흐름에서 비교적 순조로운 쪽에 있습니다. 바탕은 있고 길은 열려 있으니, 꾸준히 이어 가는 것이 중요합니다. 일상의 작은 일에 쓰면 시간이 지나 가장 믿음직한 힘이 됩니다.",
+      mixed: "{brief}. 이 면은 순조로울 때와 막힐 때가 섞여 있습니다. 핵심은 운이 아니라 속도입니다. 잘 풀릴 때 욕심내지 말고, 막힐 때 억지로 밀지 마세요. 시간을 두고 키워 갈 면으로 대하세요.",
+      bad: "{brief}. 이 면은 지금은 약한 편입니다. 안 된다는 뜻이 아니라, 먼저 약점을 보완하고 천천히 가라는 신호입니다. 약한 면일수록 급히 증명하려 하지 말고, 작은 일부터 단단히 다지세요."
+    },
+    aspectDetailAdvice: {
+      good: "조언: 조금 적극적으로. 완벽한 때를 기다리지 말고 기회가 오면 잡으세요. 다만 여유를 남기고, 좋은 흐름을 한 번에 다 쓰지 마세요.",
+      mixed: "조언: 지키기와 나아가기를 반반씩. 작은 목표 하나를 정해 이루면 다음을 더하세요. 한 번 주춤했다고 이 면 전체를 부정하지 마세요.",
+      bad: "조언: 먼저 지키고 나중에 나아가세요. 큰 결정을 하기 전에 믿을 만한 사람에게 묻고, 돈도 약속도 한 번에 걸지 마세요."
+    },
+    lnPhraseLine: function(y, p){ return y + "년 연간 운세의 원문은 「" + p + "」입니다."; },
+    lnSecOverall: "한 해 전체", lnSecFirst: "상반기", lnSecSecond: "하반기", lnSecSeasons: "사계절", lnSecDo: "좋은 것", lnSecDont: "피할 것", lnSecKeys: "중점 알림",
+    lnFirst: {
+      good: "상반기는 순조롭습니다. 중요한 일을 먼저 하고 기반을 다지세요. 돈과 관계는 먼저 안정시키세요.",
+      mixed: "상반기는 먼저 어렵고 뒤에 안정됩니다. 처음부터 크게 벌이지 말고 작은 일부터 잘하세요.",
+      bad: "상반기는 저항이 큽니다. 중요한 일은 잠시 미루고 작은 일부터 잘하세요. 한 번에 너무 많이 안지 마세요."
+    },
+    lnSecond: {
+      good: "하반기에도 흐름이 이어져 전반기에 한 일이 서서히 효과를 봅니다. 성과를 거두고 다음 목표를 정하세요.",
+      mixed: "하반기는 먼저 지키고 뒤에 살피는 때입니다. 전반기에 지킨 만큼 후반에 전환이 옵니다. 계획은 작게, 한 걸음씩.",
+      bad: "하반기는 먼저 지키고 뒤에 살피는 때입니다. 전반기에 지킨 만큼 전환이 옵니다. 몸을 돌보고 믿을 만한 사람과 상의하세요."
+    },
+    lnSeasons: {
+      good: ["봄: 시작이 순조로우니 중요한 일을 먼저.", "여름: 흐름이 이어지니 조금 더 해도 좋습니다.", "가을: 수확의 계절, 전반기의 노력이 효과를 봅니다.", "겨울: 성과를 지키고 새해를 준비하세요."],
+      mixed: ["봄: 먼저 안정, 시작을 서두르지 마세요.", "여름: 하나씩, 욕심내지 마세요.", "가을: 돌아보고 부족한 곳을 채우세요.", "겨울: 쉬며 힘을 모아 다시 출발할 준비를."],
+      bad: ["봄: 작은 일부터 잘하세요.", "여름: 욕심내지 말고 하나씩.", "가을: 안정을 지키고 남과 비교하지 마세요.", "겨울: 푹 쉬고 다시 출발할 준비를."]
+    },
+    lnDo: {
+      good: ["돈을 모으세요. 순조로울 때도 여유를 남기세요.", "중요한 일을 먼저 하고 미루지 마세요.", "조금 적극적으로. 좋은 일은 스스로 잡으러 가야 합니다."],
+      mixed: ["먼저 손에 있는 일을 단단히 다지세요.", "믿을 만한 사람에게 묻고 의견을 들으세요.", "먼저 저축해 손에 있는 돈을 지키세요."],
+      bad: ["믿을 만한 사람에게 묻고 가까운 사람의 의견을 들으세요.", "일찍 자고 일찍 일어나 몸부터 돌보세요.", "먼저 저축해 손에 있는 돈을 지키세요.", "손에 있는 일을 단단히 다진 뒤 다음 단계를 말하세요."]
+    },
+    lnDont: {
+      good: ["한 번에 너무 많이 안지 마세요. 욕심내면 흐트러집니다.", "순조로울 때도 함부로 쓰지 말고 돈을 지키세요.", "화난 말을 하지 마세요. 한마디에 좋은 흐름이 깨집니다."],
+      mixed: ["충동적으로 쓰지 말고 큰돈을 한 번에 걸지 마세요.", "소문마다 흔들리지 말고 결정 전에 먼저 식히세요.", "밤새워 무리하지 마세요. 몸이 무너지면 아무것도 못 합니다."],
+      bad: ["공을 서두르지 말고, 서지도 못한 채 판을 벌이지 마세요.", "남과 속도를 겨루지 마세요. 겨루면 리듬이 흐트러집니다.", "충동적으로 쓰지 말고 큰돈을 한 번에 걸지 마세요.", "밤새워 무리하지 마세요. 몸이 무너지면 아무것도 못 합니다."]
+    },
+    lnKeys: {
+      good: ["돈: 올해는 돈이 순조롭게 들어옵니다. 빨리 버는 것보다 모으는 것이 중요합니다.", "감정: 감정이 순조롭습니다. 많이 상의하고 좋은 흐름을 둘이 함께 지키세요.", "건강: 건강이 안정적입니다. 밤새우지 마세요. 몸이 좋아야 힘이 납니다."],
+      mixed: ["돈: 돈을 먼저 안정시키세요. 빨리 버는 것보다 모으는 것이 중요합니다.", "감정: 관계를 먼저 안정시키세요. 다툼을 줄이고 많이 상의하세요.", "건강: 건강부터 돌보세요. 밤새우지 말고 무리하지 마세요."],
+      bad: ["돈: 올해는 돈을 먼저 안정시키세요. 빨리 버는 것보다 모으는 것이 중요합니다.", "감정: 관계를 먼저 안정시키세요. 다툼을 줄이고 많이 상의하세요.", "건강: 건강부터 돌보세요. 밤새우지 말고 무리하지 마세요. 몸이 안정돼야 힘이 납니다."]
+    },
+    bundleBonusTitle: "전체 느낌 · 강약 분석",
+    bundleBonus: function(phrase, label){ return "전체 원문은 「" + phrase + "」, 등급은 " + label + "입니다. 강약은 세 쌍의 숫자가 어떤 에너지에 떨어지는지로 봅니다. 순조로운 면은 쓰고, 약한 면은 먼저 지키세요. 전 패키지가 열리면 아래 17개 면과 연간 운세를 하나씩 읽을 수 있습니다."; },
+    liunianDetailNote: "상세판에는 한 해 전체, 상반기, 하반기, 사계절, 좋은 것과 피할 것, 중점 알림이 포함됩니다. 약 600자.",
+    soonTitle: "실제 결제는 곧 열립니다",
+    soonBody: function(price){ return "이 항목은 " + price + "입니다. 실제 온라인 결제는 곧 열립니다. 지금 Checkout을 눌러도 온라인으로 청구되지 않으며, 결제한 것으로 기록되지 않습니다. 결제가 개통되면 결제 페이지에서 결제를 마치고 이 페이지로 돌아오면 이 상세판이 자동으로 열립니다."; },
+    closeBtn: "알겠습니다",
+    disclaimer: "이 사이트의 해석은 당신의 번호를 종합해 감정한 것으로 참고와 오락을 위한 것이며 어떤 결과도 보장하지 않습니다. 투자와 건강, 소송 등에 대해서는 경향만 말하며 구체적인 조언이나 결론이 아닙니다. 구체적인 일은 자신의 실제 상황에 맞춰 결정하세요.",
+    rulesTitle: "면책과 규칙",
+    rules: [
+      "결제는 이 해석 내용 자체에 대한 것이며 운을 바꾸는 서비스가 아닙니다. 결제한다고 운이 바뀌지 않고, 해석이 결과의 개선을 약속하지도 않습니다.",
+      "이 해석은 의료 조언이 아니며 투자 조언도 아닙니다. 건강, 투자, 소송 등에 대해서는 경향만 말하며 진단이나 권유, 결론이 아닙니다. 구체적인 일은 전문가와 상담하세요.",
+      "환불 규칙: 상세판은 한 번 열어서 보면 내용이 이미 전달된 것이므로 환불할 수 없습니다. 결제 후 아직 보지 않았는데 문제가 생기면 점주에게 연락해 주세요."
+    ],
+    newReading: "다른 번호 감정하기",
+    svcTitle: "휴대폰 번호 변경 서비스",
+    svcNew: "새 서비스",
+    svcDesc: "당신의 생일을 바탕으로, 더 좋은 기운의 번호 후보를 골라 드립니다. 먼저 특히 키우고 싶은 면을 알려 주세요. 생일과 희망에 맞춰 번호를 고르고, 바꿀지는 당신이 결정합니다.",
+    svcPriceNote: "1회 결제",
+    svcNeedsTitle: "필요한 정보",
+    svcNeeds: ["생일", "성별", "현재 휴대폰 번호", "키우고 싶은 면: 사업 / 감정 / 재물 / 기타(직접 입력)", "번호를 받을 이메일 주소"],
+    svcDelivery: "결제 후 3일 이내에 이메일로 보내 드립니다.",
+    svcNoPromise: "번호는 참고용이며, 행운을 약속하거나 결과가 바뀐다고 보장하지 않습니다.",
+    svcBirthday: "생일",
+    svcGender: "성별",
+    svcFemale: "여성",
+    svcMale: "남성",
+    svcPhone: "현재 휴대폰 번호",
+    svcPhonePh: "현재 번호 전체를 입력하세요",
+    svcFocus: "키우고 싶은 면",
+    svcFocusCareer: "사업",
+    svcFocusLove: "감정",
+    svcFocusWealth: "재물",
+    svcFocusOther: "기타",
+    svcFocusOtherLabel: "무엇을 키우고 싶으세요?",
+    svcFocusOtherPh: "예: 건강, 학업, 대인관계…",
+    svcEmail: "번호를 받을 이메일",
+    svcEmailPh: "name@example.com",
+    svcSubmit: function(p){ return "Checkout 결제 · " + p; },
+    svcFillError: "생일, 성별, 현재 휴대폰 번호, 키우고 싶은 면, 이메일을 모두 채운 뒤 제출해 주세요.",
+    svcReceivedTitle: "신청이 접수되었습니다",
+    svcReceivedBody: function(email){ return "신청이 접수되었습니다. 골라 드린 번호는 3일 이내에 입력하신 이메일" + (email ? "(" + email + ")" : "") + "로 보내 드립니다. 받은편지함을 확인해 주세요."; },
+    svcSoonBody: function(price){ return "이 서비스는 " + price + "이며 1회 결제입니다. 결제 채널을 연결하는 중이라 아직 결제를 받고 있지 않으며, 미리 보내 드리는 것도 없습니다. 개통되면 여기서 결제하고 위 정보를 제출할 수 있고, 결제 후 3일 이내에 이메일로 번호를 보내 드립니다."; }
+  }
+};
+var LANGS = ["zh","en","ja","ko"];
+var LANG_LABELS = { zh:"中文", en:"English", ja:"日本語", ko:"한국어" };
+var PRICE_ASPECT = 100, PRICE_LIUNIAN = 990, PRICE_BUNDLE = 1990, PRICE_SEPARATE = 2690, PRICE_CHANGE = 9990;
+function fmtUSD(cents){ return "US$" + (cents/100).toFixed(2); }
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function reducedMotion(){ try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch(e){ return false; } }
+
+/* ---------- reading engine (conclusions only) ---------- */
+function toneBand(tone){ if(tone==="daji"||tone==="ji") return "good"; if(tone==="xiong") return "bad"; return "mixed"; }
+function compute(last4, year, lang){
+  var pack = DATA.langs[lang];
+  var num = parseInt(last4, 10);
+  var idx = ((num % 80) + 80) % 80;
+  var tone = DATA.tones[idx];
+  var band = toneBand(tone);
+  var pairs = [last4.slice(0,2), last4.slice(1,3), last4.slice(2,4)];
+  var groups = pairs.map(function(p){ return DATA.pairGroup[p] || null; });
+  var aspects = DATA.aspects.map(function(def, i){
+    var group = null;
+    if(def.firstPair){ group = groups[0]; }
+    else {
+      for(var k=0;k<groups.length;k++){ if(groups[k] && def.gov.indexOf(groups[k])>=0){ group = groups[k]; break; } }
+    }
+    var brief;
+    if(group){ brief = pack.matrix[group][i] || ""; }
+    else {
+      var sp = pack.briefSpecial && pack.briefSpecial[def.key] && pack.briefSpecial[def.key][band];
+      brief = sp || pack.briefTpl[band].split("{noun}").join(pack.aspectNoun[def.key] || pack.aspectName[def.key]);
+    }
+    return { key: def.key, name: pack.aspectName[def.key], brief: brief };
+  });
+  var lnIdx = (((idx + (year % 100)) % 80) + 80) % 80;
+  var lnTone = DATA.tones[lnIdx];
+  return {
+    last4: last4, year: year,
+    verdictLabel: pack.toneLabel[tone],
+    verdictBad: band === "bad",
+    band: band,
+    verdictPhrase: pack.table[idx],
+    overallSummary: pack.overallSummary[band].split("{phrase}").join(pack.table[idx]),
+    aspects: aspects,
+    liunian: {
+      name: pack.liunianName, year: year,
+      label: pack.toneLabel[lnTone],
+      toneKey: lnTone, band: toneBand(lnTone),
+      phrase: pack.table[lnIdx],
+      brief: pack.liunianBrief[lnTone]
+    }
+  };
+}
+
+/* ---------- state ---------- */
+var lang = "zh";
+var digits = ["","","",""];
+var year = 2027;
+var report = null;
+var noticeItem = null; /* null | 'bundle' | aspect key | 'liunian' */
+var calculating = false;
+var svcGender = "", svcFocus = "", svcNoticeShown = false, svcSubmittedEmail = "";
+var STRIPE_ASPECT_URL = "https://buy.stripe.com/bJe3cxbgW7Zn2Qeb4ZcAo00";
+var STRIPE_LIUNIAN_URL = "https://buy.stripe.com/7sY5kF3OugvTeyW4GBcAo01";
+var STRIPE_BUNDLE_URL = "https://buy.stripe.com/28E9AVacScfD1Mac93cAo02";
+var STRIPE_CHANGE_URL = "https://buy.stripe.com/28E7sNet82F33Uic93cAo03";
+/* Stripe checkout refuses to be framed: navigating this page's own frame to
+   buy.stripe.com leaves a blank page. Break out of the frame instead —
+   open Stripe in a new top-level tab; after payment Stripe redirects that
+   tab back here with ?paid=..., which unlocks the reading. */
+var stripeWin = null;
+function goStripe(url){
+  /* Tag the checkout with the purchase (last 4 digits + item) so the payment
+     is identifiable in Stripe, and keep the opener link to the checkout tab
+     (no "noopener"): after Stripe redirects that tab back here, the return
+     page uses window.opener to signal THIS tab, which then opens the bought
+     reading automatically — no tap, no re-entry. */
+  var full = url;
+  var p = pendingMem;
+  if(p && p.type){
+    var ref = "jn-" + (p.last4 || "x") + "-" + (p.type === "aspect" ? (p.key || "aspect") : p.type);
+    full = url + (url.indexOf("?") >= 0 ? "&" : "?") + "client_reference_id=" + encodeURIComponent(ref);
+  }
+  var w = null;
+  try { w = window.open(full, "_blank"); } catch(e){}
+  if(w){ stripeWin = w; try { w.focus(); } catch(e){} showPayWait(); startSignalWatch(); return; }
+  try { window.top.location.href = full; return; } catch(e){}
+  window.location.href = full;
+}
+var unlocked = { last4: "", aspects: {}, liunian: false, bundle: false };
+var paidBanner = false;
+var paidLostReturn = false; /* Stripe return arrived but no purchase record survived in any store */
+/* Checkout opens Stripe in a NEW tab, and Stripe redirects THAT tab back
+   here — sessionStorage is per-tab, so the pending purchase (last 4 digits +
+   which item) set in the original tab was invisible on return and the page
+   fell back to the gate, forcing a re-entry. localStorage is shared across
+   tabs of this browser, so write to both and read localStorage first. Only
+   the last 4 digits the visitor typed and unlock flags are stored. */
+function ssGet(k){
+  try { var v = localStorage.getItem(k); if(v) return JSON.parse(v); } catch(e){}
+  try { var v2 = sessionStorage.getItem(k); return v2 ? JSON.parse(v2) : null; } catch(e){ return null; }
+}
+function ssSet(k, v){
+  var str; try { str = JSON.stringify(v); } catch(e){ return; }
+  try { localStorage.setItem(k, str); } catch(e){}
+  try { sessionStorage.setItem(k, str); } catch(e){}
+}
+function ssDel(k){
+  try { localStorage.removeItem(k); } catch(e){}
+  try { sessionStorage.removeItem(k); } catch(e){}
+}
+function loadUnlocked(){
+  var b = bagRead();
+  if(b.unlocked && typeof b.unlocked === "object" && b.unlocked.aspects){ unlocked = b.unlocked; return; }
+  var u = ssGet("jinum_unlocked_v1"); if(u && typeof u === "object" && u.aspects) unlocked = u;
+}
+function saveUnlocked(){ ssSet("jinum_unlocked_v1", unlocked); var b = bagRead(); b.unlocked = unlocked; bagSave(b); }
+/* Purchase bag: the pending purchase and the unlock state are mirrored
+   into a cookie as well as Web Storage. The Stripe return tab is a fresh
+   page instance, and any single store can be unavailable or partitioned
+   there (framed page, privacy mode) — reading every surviving copy is
+   what lets the return land on the bought item instead of the gate. */
+function bagRead(){
+  try { var v = localStorage.getItem("jinum_bag_v1"); if(v){ var o = JSON.parse(v); if(o && typeof o === "object") return o; } } catch(e){}
+  try {
+    var m = document.cookie.match(/(?:^|;\s*)jinum_bag=([^;]*)/);
+    if(m){ var o2 = JSON.parse(decodeURIComponent(m[1])); if(o2 && typeof o2 === "object") return o2; }
+  } catch(e){}
+  return {};
+}
+function bagSave(bag){
+  var str; try { str = JSON.stringify(bag); } catch(e){ return; }
+  try { localStorage.setItem("jinum_bag_v1", str); } catch(e){}
+  try {
+    var exp = new Date(Date.now() + 7*24*3600*1000).toUTCString();
+    document.cookie = "jinum_bag=" + encodeURIComponent(str) + "; expires=" + exp + "; path=/; SameSite=Lax";
+  } catch(e){}
+}
+/* The pending purchase is also kept in a plain in-memory variable. This
+   page is displayed inside a sandboxed shell frame, where Web Storage and
+   cookies can be blocked entirely (opaque origin) — in that case every
+   stored copy is lost, but THIS tab still knows exactly what was bought,
+   and the paid return panel below works from memory alone. */
+var pendingMem = null;
+function setPending(p){
+  if(!p.ts) p.ts = Date.now();
+  pendingMem = p; ssSet("jinum_pending_v1", p);
+  /* A new checkout invalidates any payment signal from an earlier purchase,
+     so the original tab can never auto-open a stale item. */
+  try { localStorage.removeItem("jinum_paid_signal_v1"); } catch(e){}
+  var b = bagRead(); b.pending = p; if(b.signal) delete b.signal; bagSave(b);
+}
+function getPending(){
+  if(pendingMem && typeof pendingMem === "object") return pendingMem;
+  var b = bagRead();
+  if(b.pending && typeof b.pending === "object") return b.pending;
+  return ssGet("jinum_pending_v1");
+}
+function delPending(){ pendingMem = null; ssDel("jinum_pending_v1"); var b = bagRead(); if(b.pending){ delete b.pending; bagSave(b); } }
+function isAspectOpen(key){ return !!report && unlocked.last4 === report.last4 && (unlocked.bundle || !!unlocked.aspects[key]); }
+function isLiunianOpen(){ return !!report && unlocked.last4 === report.last4 && (unlocked.bundle || unlocked.liunian); }
+function aspectDetailHTML(a){
+  var u = t(); var band = report.band || "mixed";
+  var noun = (DATA.langs[lang].aspectNoun && DATA.langs[lang].aspectNoun[a.key]) || a.name;
+  var open = u.aspectDetailOpen[band].split("{brief}").join(a.brief).split("{noun}").join(noun);
+  return '<div class="detail-text"><p>' + esc(open) + '</p><p>' + esc(u.aspectDetailAdvice[band]) + "</p></div>";
+}
+function liunianDetailHTML(ln){
+  var u = t(); var band = ln.band || "mixed";
+  function lines(arr){ return arr.map(function(x){ return esc(x); }).join("<br/>"); }
+  var h = '<div class="detail-text">';
+  h += '<p class="ln-sec-h">' + esc(u.lnSecOverall) + "</p><p>" + esc(u.lnPhraseLine(ln.year, ln.phrase)) + esc(ln.brief) + "</p>";
+  h += '<p class="ln-sec-h">' + esc(u.lnSecFirst) + "</p><p>" + esc(u.lnFirst[band]) + "</p>";
+  h += '<p class="ln-sec-h">' + esc(u.lnSecSecond) + "</p><p>" + esc(u.lnSecond[band]) + "</p>";
+  h += '<p class="ln-sec-h">' + esc(u.lnSecSeasons) + "</p><p>" + lines(u.lnSeasons[band]) + "</p>";
+  h += '<p class="ln-sec-h">' + esc(u.lnSecDo) + "</p><p>" + lines(u.lnDo[band]) + "</p>";
+  h += '<p class="ln-sec-h">' + esc(u.lnSecDont) + "</p><p>" + lines(u.lnDont[band]) + "</p>";
+  h += '<p class="ln-sec-h">' + esc(u.lnSecKeys) + "</p><p>" + lines(u.lnKeys[band]) + "</p>";
+  return h + "</div>";
+}
+
+function t(){ return UI[lang]; }
+function flameSVG(size){
+  size = size || 26;
+  return '<svg width="'+size+'" height="'+Math.round(size*1.5)+'" viewBox="0 0 26 40" aria-hidden="true" class="flame">'
+    + '<ellipse cx="13" cy="14" rx="6.5" ry="11" fill="#e8a33d" opacity="0.95"/>'
+    + '<ellipse cx="13" cy="18" rx="3.4" ry="6.5" fill="#ffd98a"/>'
+    + '<rect x="11.6" y="27" width="2.8" height="5" rx="1" fill="#8a7d6b"/>'
+    + '<rect x="6" y="32" width="14" height="4.5" rx="2" fill="#c9a86a"/></svg>';
+}
+var MOTES = [
+  {left:"8%",top:"58%",size:7,d:"11s",delay:"0s"},{left:"18%",top:"72%",size:5,d:"14s",delay:"2.4s"},
+  {left:"30%",top:"50%",size:6,d:"12s",delay:"5s"},{left:"44%",top:"78%",size:4,d:"10s",delay:"1.2s"},
+  {left:"57%",top:"55%",size:6,d:"15s",delay:"3.6s"},{left:"68%",top:"70%",size:5,d:"11.5s",delay:"0.8s"},
+  {left:"79%",top:"52%",size:7,d:"13s",delay:"4.4s"},{left:"90%",top:"66%",size:4,d:"12.5s",delay:"6s"},
+  {left:"24%",top:"86%",size:4,d:"10.5s",delay:"7s"},{left:"63%",top:"88%",size:5,d:"14.5s",delay:"5.6s"}
+];
+function motesHTML(){
+  return MOTES.map(function(m){
+    return '<span class="mote" style="left:'+m.left+';top:'+m.top+';width:'+m.size+'px;height:'+m.size+'px;animation-duration:'+m.d+';animation-delay:'+m.delay+'"></span>';
+  }).join("");
+}
+
+/* ---------- render ---------- */
+var $ = function(id){ return document.getElementById(id); };
+
+function renderLangNav(){
+  $("langNav").innerHTML = LANGS.map(function(l){
+    return '<button type="button" data-lang="'+l+'" aria-pressed="'+(lang===l)+'">'+esc(LANG_LABELS[l])+'</button>';
+  }).join("");
+  Array.prototype.forEach.call($("langNav").querySelectorAll("button"), function(b){
+    b.addEventListener("click", function(){ changeLang(b.getAttribute("data-lang")); });
+  });
+}
+function renderGate(){
+  $("gateHeroes").innerHTML = LANGS.map(function(l){
+    var u = UI[l];
+    return '<h1 class="'+(l===lang?"current":"")+'" lang="'+l+'">'+esc(u.heroLines[0])+"<br/>"+esc(u.heroLines[1])+"</h1>";
+  }).join("");
+  $("gateHint").textContent = t().gateHint;
+  $("bellBtn").setAttribute("aria-label", t().openGate);
+  $("gateNote").textContent = t().onlyLast4;
+}
+function renderFlowTexts(){
+  document.documentElement.lang = lang === "zh" ? "zh-CN" : lang;
+  $("flowHero").innerHTML = esc(t().heroLines[0]) + "<br/>" + esc(t().heroLines[1]);
+  $("flowIntro").textContent = t().intro;
+  $("sloganMain").textContent = t().sloganMain;
+  $("sloganSub").textContent = t().sloganSub;
+  $("yearLabel").textContent = t().yearLabel;
+  $("beginBtn").textContent = calculating ? t().calculating : t().begin;
+  $("fillHint").textContent = t().fillHint;
+  $("fillHint").classList.toggle("hidden", ready());
+  $("onlyNote").textContent = t().onlyLast4;
+  $("gateNote").textContent = t().onlyLast4;
+  $("rulesTitle").textContent = t().rulesTitle;
+  $("disclaimer").textContent = t().disclaimer;
+  $("rulesList").innerHTML = t().rules.map(function(r){ return "<li><span>"+esc(r)+"</span></li>"; }).join("");
+  renderService();
+  showPaidRecover();
+}
+/* ---------- payment return helpers (original tab + lost-record recovery) ---------- */
+var PAY_STRINGS = {
+  zh: { waitTitle: "收银台已在新标签页打开", waitBody: "请不要关闭这个标签页。付款完成后，跳回的页面会把付款信号发回本站，你买的详细版会自动打开，不用重新输入号码、不用自己找、不用填表。万一没有自动打开，点下面的按钮就会打开。", waitBtn: "我已完成付款 · 立即打开", dismiss: "取消" },
+  en: { waitTitle: "Checkout opened in a new tab", waitBody: "Please keep this tab open. When payment completes, the return page sends the payment signal back to this site and the detailed reading you bought opens automatically — no re-entering your number, no hunting for the item, no form. If it does not open by itself, the button below opens it.", waitBtn: "I've paid · Open now", dismiss: "Dismiss" },
+  ja: { waitTitle: "決済ページを新しいタブで開きました", waitBody: "このタブは閉じないでください。お支払いが完了すると、戻りページが支払い信号を本サイトへ送り、購入した詳細版が自動で開きます。番号の再入力も、項目探しも、フォーム入力も不要です。自動で開かない場合は下のボタンで開けます。", waitBtn: "支払い完了 · 今すぐ開く", dismiss: "閉じる" },
+  ko: { waitTitle: "결제 페이지가 새 탭에서 열렸습니다", waitBody: "이 탭을 닫지 마세요. 결제가 완료되면 돌아온 페이지가 결제 신호를 이 사이트로 보내고, 구매한 상세 해석이 자동으로 열립니다. 번호를 다시 입력하거나, 항목을 찾거나, 양식을 작성할 필요가 없습니다. 자동으로 열리지 않으면 아래 버튼으로 열 수 있습니다.", waitBtn: "결제 완료 · 지금 열기", dismiss: "닫기" }
+};
+function payStr(){ return PAY_STRINGS[lang] || PAY_STRINGS.zh; }
+function showPayWait(){
+  var s = payStr();
+  var el = $("payWait");
+  if(!el){
+    el = document.createElement("div");
+    el.id = "payWait";
+    el.className = "paywait";
+    el.setAttribute("role", "status");
+    document.body.appendChild(el);
+  }
+  el.innerHTML = '<h5 class="font-display">' + esc(s.waitTitle) + '</h5><p>' + esc(s.waitBody) + '</p>'
+    + '<button type="button" class="btn-primary recover-btn font-display" id="payWaitBtn">' + esc(s.waitBtn) + '</button>'
+    + '<button type="button" class="paywait-dismiss" id="payWaitDismiss">' + esc(s.dismiss) + '</button>';
+  el.classList.remove("hidden");
+  $("payWaitBtn").addEventListener("click", confirmPaidFromOriginalTab);
+  $("payWaitDismiss").addEventListener("click", function(){ el.classList.add("hidden"); });
+}
+function hidePayWait(){ var el = $("payWait"); if(el) el.classList.add("hidden"); }
+function confirmPaidFromOriginalTab(){
+  var p = pendingMem || getPending();
+  hidePayWait();
+  if(!p || !p.type) return;
+  delPending();
+  if(p.type === "change"){
+    if(p.email) svcSubmittedEmail = p.email;
+    svcNoticeShown = true;
+    renderService();
+    window.setTimeout(function(){ $("svcWrap").scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" }); }, 80);
+    return;
+  }
+  applyPaidUnlock(p.type, p);
+}
+var paidLostType = "";
+/* Notice only — there is deliberately NO recovery form. A paid return that
+   arrives without its purchase data shows this explanation and the normal
+   reading flow; unlocking happens automatically through the return data,
+   the stored purchase record, or the payment signal described below. */
+function showPaidRecover(){
+  var d = $("paidRecover");
+  if(!d) return;
+  if(!paidLostReturn){ d.classList.add("hidden"); d.innerHTML = ""; return; }
+  d.innerHTML = '<p style="margin:0">' + esc(t().paidRecover) + '</p>';
+  d.classList.remove("hidden");
+}
+/* ---------- payment signal: return tab -> original tab, zero taps ----------
+   When the Stripe return page detects ?paid=..., it broadcasts the purchase
+   (item + last 4 digits) on every channel that can cross between the two
+   tabs of this site:
+   1. a localStorage record + the cookie bag (the 'storage' event wakes the
+      original tab; polling covers browsers that miss the event);
+   2. window.opener.postMessage — checkout is opened WITHOUT noopener, so
+      the return page's top window still holds an opener handle to the tab
+      (or frame) that started checkout, and postMessage is allowed
+      cross-origin where storage is blocked.
+   The original tab listens on all of these and, on the first signal that
+   matches its pending purchase, opens the bought reading by itself. */
+var SIGNAL_KEY = "jinum_paid_signal_v1";
+function writePaidSignal(sig){
+  try { localStorage.setItem(SIGNAL_KEY, JSON.stringify(sig)); } catch(e){}
+  var b = bagRead(); b.signal = sig; bagSave(b);
+}
+function readPaidSignal(){
+  try { var v = localStorage.getItem(SIGNAL_KEY); if(v){ var o = JSON.parse(v); if(o && o.type) return o; } } catch(e){}
+  var b = bagRead();
+  if(b.signal && typeof b.signal === "object" && b.signal.type) return b.signal;
+  return null;
+}
+function notifyOpener(sig){
+  try {
+    /* Post ONLY to this artifact's own exact origin, and only the minimal
+       signal (item + last 4 digits) — never the buyer's email. When this
+       frame runs on an opaque origin there is no safe target, so the
+       opener channel stays silent and the storage signal is used instead. */
+    var own = "";
+    try { own = window.location.origin || ""; } catch(e){}
+    if(!own || own === "null") return;
+    var op = null;
+    try { op = window.opener; } catch(e){}
+    if(!op){ try { if(window.top && window.top !== window) op = window.top.opener; } catch(e){} }
+    if(op && !op.closed) op.postMessage({ jinumPaid: { type: sig.type, key: sig.key, last4: sig.last4, lang: sig.lang, ts: sig.ts } }, own);
+  } catch(e){}
+}
+var signalApplied = false;
+function applySignal(sig){
+  if(signalApplied || !sig || !sig.type) return;
+  var p = pendingMem || getPending();
+  /* Ignore a signal left over from an earlier purchase than the one this
+     tab is currently waiting on. */
+  if(p && p.ts && sig.ts && sig.ts < p.ts - 2000) return;
+  if(sig.type === "change"){
+    signalApplied = true;
+    hidePayWait();
+    if(sig.email || (p && p.email)) svcSubmittedEmail = sig.email || p.email;
+    svcNoticeShown = true;
+    if(gateOpened || !$("flow").classList.contains("hidden")) renderService();
+    return;
+  }
+  /* Merge: the signal carries what the return page knew; this tab's own
+     pending purchase fills any gap (number / aspect key). */
+  var merged = {
+    type: sig.type,
+    key: sig.key || (p && p.type === sig.type ? p.key : undefined),
+    last4: (/^\d{4}$/.test(sig.last4 || "") ? sig.last4 : (p && p.last4)) || "",
+    lang: sig.lang || (p && p.lang) || lang,
+    email: sig.email || (p && p.email)
+  };
+  if(!/^\d{4}$/.test(merged.last4 || "")) return;
+  if(merged.type === "aspect" && !merged.key) return;
+  signalApplied = true;
+  delPending();
+  applyPaidUnlock(merged.type, merged);
+}
+function checkSignal(){ var sig = readPaidSignal(); if(sig) applySignal(sig); }
+var signalWatchTimer = null;
+function startSignalWatch(){
+  checkSignal();
+  if(signalWatchTimer) return;
+  var ticks = 0;
+  signalWatchTimer = window.setInterval(function(){
+    ticks++;
+    checkSignal();
+    if(signalApplied || ticks > 240){ window.clearInterval(signalWatchTimer); signalWatchTimer = null; }
+  }, 1500);
+}
+window.addEventListener("storage", function(e){
+  if(!e || !e.key || e.key === SIGNAL_KEY || e.key === "jinum_bag_v1") checkSignal();
+});
+window.addEventListener("message", function(e){
+  /* Only accept payment signals posted from this artifact's own origin. */
+  try { if(!e || !e.origin || e.origin === "null" || e.origin !== window.location.origin) return; } catch(err){ return; }
+  var d = e && e.data;
+  if(d && typeof d === "object" && d.jinumPaid) applySignal(d.jinumPaid);
+  else if(typeof d === "string" && d.indexOf("paid=") >= 0){
+    var rp = returnFromString(d);
+    if(rp && rp.paid) applySignal({ type: rp.paid, key: rp.a, last4: rp.t });
+  }
+});
+function scrollHighlight(id){
+  function go(){
+    var el = $(id) || $("results");
+    if(!el) return;
+    if(id && id !== "results") el.classList.add("paid-highlight");
+    el.scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "center" });
+  }
+  window.setTimeout(go, 90);
+  window.setTimeout(go, 560);
+}
+function renderDigits(){
+  var g = $("digitsGroup");
+  g.setAttribute("aria-label", t().digitsGroup);
+  g.innerHTML = "";
+  digits.forEach(function(d, i){
+    var inp = document.createElement("input");
+    inp.className = "digit-box font-display" + (d ? " filled" : "");
+    inp.setAttribute("inputmode", "numeric");
+    inp.setAttribute("autocomplete", "off");
+    inp.setAttribute("aria-label", t().digitLabel(i));
+    inp.value = d;
+    inp.placeholder = "·";
+    inp.addEventListener("input", function(){ setDigit(i, inp.value); });
+    inp.addEventListener("keydown", function(e){
+      if(e.key === "Backspace" && !digits[i] && i > 0){
+        var prev = g.querySelectorAll("input")[i-1]; if(prev) prev.focus();
+      }
+    });
+    g.appendChild(inp);
+  });
+}
+function focusDigit(i){
+  var inputs = $("digitsGroup").querySelectorAll("input");
+  if(inputs[i]) inputs[i].focus();
+}
+function setDigit(i, v){
+  var clean = v.replace(/\D/g, "");
+  if(clean.length > 1){
+    var all = clean.slice(0,4).split("");
+    digits = ["","","",""];
+    all.forEach(function(c, idx){ digits[idx] = c; });
+    renderDigits(); focusDigit(Math.min(all.length, 3)); syncBegin(); return;
+  }
+  digits[i] = clean;
+  renderDigits();
+  if(clean && i < 3) focusDigit(i+1); else focusDigit(i);
+  syncBegin();
+}
+function ready(){ return /^\d{4}$/.test(digits.join("")); }
+function syncBegin(){
+  $("beginBtn").disabled = !ready() || calculating;
+  $("fillHint").classList.toggle("hidden", ready());
+}
+function renderYear(){
+  $("yearToggle").setAttribute("aria-label", t().yearLabel);
+  $("yearToggle").innerHTML = [2027].map(function(y){
+    return '<button type="button" data-year="'+y+'" aria-pressed="'+(year===y)+'">'+y+esc(t().yearSuffix)+"</button>";
+  }).join("");
+  Array.prototype.forEach.call($("yearToggle").querySelectorAll("button"), function(b){
+    b.addEventListener("click", function(){
+      year = parseInt(b.getAttribute("data-year"), 10);
+      renderYear();
+      if(report){ report = compute(report.last4, year, lang); noticeItem = null; renderReport(); }
+    });
+  });
+}
+function noticeHTML(itemKey, priceCents){
+  if(noticeItem !== itemKey) return "";
+  return '<div class="notice" role="note"><h5 class="font-display">'+esc(t().soonTitle)+'</h5>'
+    + '<p>'+esc(t().soonBody(fmtUSD(priceCents)))+'</p>'
+    + '<button type="button" class="btn-close" data-close-notice="1">'+esc(t().closeBtn)+"</button></div>";
+}
+function renderReport(){
+  var el = $("results");
+  if(!report){ el.classList.add("hidden"); el.innerHTML = ""; return; }
+  var u = t();
+  var total = report.aspects.length + 1;
+  var h = "";
+  if(paidBanner) h += '<section class="paid-banner reveal" role="status">' + esc(u.paidBanner) + "</section>";
+  h += '<section class="verdict-card reveal"><div class="verdict-flex">'
+    + '<span class="seal-badge font-display'+(report.verdictBad?" bad":"")+'" role="img" aria-label="'+esc(u.ratingLabel(report.verdictLabel))+'">'+esc(report.verdictLabel)+'</span>'
+    + '<div style="min-width:0"><p class="verdict-kicker">'+esc(u.overallOf(report.last4))+'</p>'
+    + '<h2 class="verdict-phrase font-display">'+esc(report.verdictPhrase)+'</h2>'
+    + '<p class="verdict-summary">'+esc(report.overallSummary)+'</p></div></div></section>';
+
+  h += '<section class="bundle-card reveal" id="card-bundle" style="animation-delay:90ms" aria-label="'+esc(u.bundleTitle)+'">'
+    + '<div class="bundle-head"><span class="flame-halo">'+flameSVG(18)+'</span><h3 class="font-display">'+esc(u.bundleTitle)+'</h3></div>'
+    + '<p class="bundle-desc">'+esc(u.bundleDesc(total))+'</p>'
+    + '<p class="bundle-inc">'+esc(u.bundleIncludes)+'</p>'
+    + '<p class="bundle-price font-display">'+esc(u.bundlePriceNote(fmtUSD(PRICE_BUNDLE), fmtUSD(PRICE_SEPARATE), fmtUSD(PRICE_SEPARATE - PRICE_BUNDLE)))+'</p>'
+    + (unlocked.bundle && unlocked.last4 === report.last4
+       ? '<div class="detail-text"><p class="ln-sec-h">' + esc(u.bundleBonusTitle) + "</p><p>" + esc(u.bundleBonus(report.verdictPhrase, report.verdictLabel)) + "</p></div>"
+       : '<button type="button" class="btn-seal btn-bundle font-display" data-bundle-checkout="1">'+esc(u.checkoutBundle(fmtUSD(PRICE_BUNDLE)))+"</button>")
+    + "</section>";
+
+  h += '<div class="reveal" style="animation-delay:150ms"><div class="section-head"><h3 class="font-display">'+esc(u.freeTitle)+'</h3><span class="ornament-line flex" aria-hidden="true"></span><span class="ornament-diamond" aria-hidden="true"></span></div></div>';
+  h += '<section class="aspects" aria-label="'+esc(u.freeTitle)+'">';
+  report.aspects.forEach(function(a, i){
+    var open = isAspectOpen(a.key);
+    h += '<article class="card card-hover reveal" id="card-' + a.key + '" style="animation-delay:'+(180 + Math.min(i,10)*60)+'ms">'
+      + '<div class="aspect-head"><h4 class="font-display"><span class="aspect-num" aria-hidden="true">'+String(i+1).padStart(2,"0")+'</span>'+esc(a.name)+'</h4>'
+      + '<span class="tag' + (open ? " open" : "") + '">' + esc(open ? u.unlockedTag : u.lockedTag) + '</span></div>'
+      + '<p class="brief">'+esc(a.brief)+'</p>'
+      + (open ? aspectDetailHTML(a)
+         : '<button type="button" class="btn-ghost-gold" data-checkout="'+a.key+'" aria-label="'+esc(u.detailFor(a.name))+'">'+esc(u.checkoutAspect(fmtUSD(PRICE_ASPECT)))+"</button>")
+      + "</article>";
+  });
+  var ln = report.liunian;
+  var lnOpen = isLiunianOpen();
+  h += '<article class="card card-hover reveal" id="card-liunian" style="animation-delay:760ms">'
+    + '<div class="aspect-head"><h4 class="font-display"><span class="ln-diamond" aria-hidden="true"></span><span class="aspect-num seal-num" aria-hidden="true">18</span>'+esc(ln.name)+" "+ln.year+'</h4>'
+    + '<span class="tag' + (lnOpen ? " open" : "") + '">' + esc(lnOpen ? u.unlockedTag : u.lockedTag) + '</span></div>'
+    + '<p class="brief">'+esc(ln.phrase)+" · "+esc(ln.label)+" — "+esc(ln.brief)+'</p>'
+    + (lnOpen ? liunianDetailHTML(ln)
+       : '<p class="ln-note">'+esc(u.liunianDetailNote)+'</p>'
+       + '<button type="button" class="btn-ghost-gold" data-liunian-checkout="1" aria-label="'+esc(ln.name)+" "+ln.year+'">'+esc(u.checkoutLiunian(fmtUSD(PRICE_LIUNIAN)))+"</button>")
+    + "</article>";
+  h += "</section>";
+  h += '<button type="button" class="btn-new" id="newBtn">'+esc(u.newReading)+"</button>";
+  el.innerHTML = h;
+  el.classList.remove("hidden");
+  Array.prototype.forEach.call(el.querySelectorAll("[data-notice]"), function(b){
+    b.addEventListener("click", function(){ noticeItem = b.getAttribute("data-notice"); renderReport(); keepScroll(); });
+  });
+  Array.prototype.forEach.call(el.querySelectorAll("[data-checkout]"), function(b){
+    b.addEventListener("click", function(){
+      var key = b.getAttribute("data-checkout");
+      setPending({ type: "aspect", key: key, last4: report ? report.last4 : "", year: 2027, lang: lang });
+      goStripe(STRIPE_ASPECT_URL);
+    });
+  });
+  Array.prototype.forEach.call(el.querySelectorAll("[data-liunian-checkout]"), function(b){
+    b.addEventListener("click", function(){
+      setPending({ type: "liunian", last4: report ? report.last4 : "", year: 2027, lang: lang });
+      goStripe(STRIPE_LIUNIAN_URL);
+    });
+  });
+  Array.prototype.forEach.call(el.querySelectorAll("[data-bundle-checkout]"), function(b){
+    b.addEventListener("click", function(){
+      setPending({ type: "bundle", last4: report ? report.last4 : "", year: 2027, lang: lang });
+      goStripe(STRIPE_BUNDLE_URL);
+    });
+  });
+  Array.prototype.forEach.call(el.querySelectorAll("[data-close-notice]"), function(b){
+    b.addEventListener("click", function(){ noticeItem = null; renderReport(); keepScroll(); });
+  });
+  var nb = $("newBtn");
+  if(nb) nb.addEventListener("click", function(){
+    report = null; digits = ["","","",""]; noticeItem = null;
+    renderReport(); renderDigits(); syncBegin();
+    window.scrollTo({ top: 0, behavior: reducedMotion() ? "auto" : "smooth" });
+  });
+}
+function keepScroll(){
+  /* re-render replaces nodes; scroll position is preserved by the browser
+     in most cases — nothing else needed */
+}
+function changeLang(next){
+  if(LANGS.indexOf(next) < 0) return;
+  lang = next;
+  renderLangNav(); renderGate(); renderFlowTexts(); renderDigits(); renderYear(); syncBegin();
+  if(report){ report = compute(report.last4, year, lang); renderReport(); }
+  var pw = $("payWait");
+  if(pw && !pw.classList.contains("hidden")) showPayWait();
+}
+
+/* ---------- change-number service ---------- */
+function renderSvcToggles(){
+  var u = t();
+  var g = $("genderToggle");
+  g.setAttribute("aria-label", u.svcGender);
+  g.innerHTML = [["female", u.svcFemale], ["male", u.svcMale]].map(function(o){
+    return '<button type="button" data-gender="'+o[0]+'" aria-pressed="'+(svcGender===o[0])+'">'+esc(o[1])+"</button>";
+  }).join("");
+  Array.prototype.forEach.call(g.querySelectorAll("button"), function(b){
+    b.addEventListener("click", function(){ svcGender = b.getAttribute("data-gender"); renderSvcToggles(); });
+  });
+  var f = $("focusToggle");
+  f.setAttribute("aria-label", u.svcFocus);
+  f.innerHTML = [["career", u.svcFocusCareer], ["love", u.svcFocusLove], ["wealth", u.svcFocusWealth], ["other", u.svcFocusOther]].map(function(o){
+    return '<button type="button" data-focus="'+o[0]+'" aria-pressed="'+(svcFocus===o[0])+'">'+esc(o[1])+"</button>";
+  }).join("");
+  Array.prototype.forEach.call(f.querySelectorAll("button"), function(b){
+    b.addEventListener("click", function(){ svcFocus = b.getAttribute("data-focus"); renderSvcToggles(); });
+  });
+  $("focusOtherField").classList.toggle("hidden", svcFocus !== "other");
+}
+function renderService(){
+  var u = t();
+  if(!$("svcTitle")) return;
+  $("svcFlame").innerHTML = flameSVG(18);
+  $("svcTitle").textContent = u.svcTitle;
+  $("svcNewTag").textContent = u.svcNew;
+  $("svcDesc").textContent = u.svcDesc;
+  $("svcPriceAmt").textContent = fmtUSD(PRICE_CHANGE);
+  $("svcPriceNote").textContent = u.svcPriceNote;
+  $("svcNeedsTitle").textContent = u.svcNeedsTitle;
+  $("svcNeeds").innerHTML = u.svcNeeds.map(function(n){ return "<li><span>"+esc(n)+"</span></li>"; }).join("");
+  $("svcDelivery").textContent = u.svcDelivery;
+  $("svcNoPromise").textContent = u.svcNoPromise;
+  $("lblBirthday").textContent = u.svcBirthday;
+  $("lblGender").textContent = u.svcGender;
+  $("lblPhone").textContent = u.svcPhone;
+  $("svcPhone").placeholder = u.svcPhonePh;
+  $("lblFocus").textContent = u.svcFocus;
+  $("lblFocusOther").textContent = u.svcFocusOtherLabel;
+  $("svcFocusOther").placeholder = u.svcFocusOtherPh;
+  $("lblEmail").textContent = u.svcEmail;
+  $("svcEmail").placeholder = u.svcEmailPh;
+  $("svcSubmit").textContent = u.svcSubmit(fmtUSD(PRICE_CHANGE));
+  $("svcNoticeTitle").textContent = u.svcReceivedTitle || u.soonTitle;
+  $("svcNoticeBody").textContent = u.svcReceivedBody ? u.svcReceivedBody(svcSubmittedEmail) : u.svcSoonBody(fmtUSD(PRICE_CHANGE));
+  $("svcNoticeClose").textContent = u.closeBtn;
+  $("svcNotice").classList.toggle("hidden", !svcNoticeShown);
+  renderSvcToggles();
+}
+$("svcForm").addEventListener("submit", function(e){
+  e.preventDefault();
+  var phoneDigits = $("svcPhone").value.replace(/\D/g, "");
+  var email = $("svcEmail").value.trim();
+  var focusOk = !!svcFocus && (svcFocus !== "other" || !!$("svcFocusOther").value.trim());
+  var ok = !!$("svcBirthday").value && !!svcGender && phoneDigits.length >= 6 && focusOk && /.+@.+\..+/.test(email);
+  if(!ok){
+    svcNoticeShown = false;
+    $("svcNotice").classList.add("hidden");
+    var err = $("svcErr");
+    err.textContent = t().svcFillError;
+    err.classList.remove("hidden");
+    return;
+  }
+  $("svcErr").classList.add("hidden");
+  svcSubmittedEmail = email;
+  setPending({ type: "change", email: email, lang: lang });
+  goStripe(STRIPE_CHANGE_URL);
+});
+$("svcNoticeClose").addEventListener("click", function(){
+  svcNoticeShown = false;
+  $("svcNotice").classList.add("hidden");
+});
+
+/* ---------- gate ---------- */
+var gateOpened = false, gateLeaving = false;
+function openGate(){
+  if(gateOpened || gateLeaving) return;
+  var gate = $("gate");
+  function finish(){
+    gateOpened = true;
+    gate.classList.add("hidden");
+    $("flow").classList.remove("hidden");
+    renderFlowTexts(); renderDigits(); renderYear(); syncBegin();
+  }
+  if(reducedMotion()){ finish(); return; }
+  gateLeaving = true;
+  gate.classList.add("gate-leaving");
+  window.setTimeout(finish, 390);
+}
+(function(){
+  var btn = $("bellBtn");
+  var startY = null, dy = 0;
+  btn.addEventListener("click", openGate);
+  btn.addEventListener("pointerdown", function(e){ startY = e.clientY; });
+  btn.addEventListener("pointermove", function(e){
+    if(startY === null) return;
+    dy = Math.max(0, Math.min(64, e.clientY - startY));
+    btn.style.transform = "translateY(" + dy + "px)";
+    if(dy > 48){ startY = null; btn.style.transform = ""; openGate(); }
+  });
+  function reset(){ startY = null; btn.style.transform = ""; }
+  btn.addEventListener("pointerup", reset);
+  btn.addEventListener("pointerleave", reset);
+})();
+
+/* ---------- begin ---------- */
+$("beginBtn").addEventListener("click", function(){
+  if(!ready() || calculating) return;
+  calculating = true;
+  $("beginBtn").disabled = true;
+  $("beginBtn").textContent = t().calculating;
+  $("beginBtn").setAttribute("aria-label", t().calculating);
+  $("errMsg").classList.add("hidden");
+  $("loader").classList.remove("hidden");
+  var last4 = digits.join(""), yr = year, lg = lang;
+  window.setTimeout(function(){
+    calculating = false;
+    $("loader").classList.add("hidden");
+    $("beginBtn").textContent = t().begin;
+    $("beginBtn").removeAttribute("aria-label");
+    report = compute(last4, yr, lg);
+    noticeItem = null;
+    renderReport(); syncBegin();
+    requestAnimationFrame(function(){
+      $("results").scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" });
+    });
+  }, reducedMotion() ? 60 : 900);
+});
+
+/* ---------- number sphere (canvas, code-drawn) ---------- */
+(function(){
+  var canvas = $("sphere");
+  if(!canvas) return;
+  var ctx = canvas.getContext("2d");
+  if(!ctx) return;
+  var reduced = reducedMotion();
+  function mulberry32(seed){
+    var s = seed;
+    return function(){
+      s |= 0; s = (s + 0x6d2b79f5) | 0;
+      var tt = Math.imul(s ^ (s >>> 15), 1 | s);
+      tt = (tt + Math.imul(tt ^ (tt >>> 7), 61 | tt)) ^ tt;
+      return ((tt ^ (tt >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  var rng = mulberry32(20261111);
+  var N = 300, goldenAngle = Math.PI * (3 - Math.sqrt(5)), points = [];
+  for(var i=0;i<N;i++){
+    var y = 1 - (i/(N-1))*2;
+    var r = Math.sqrt(Math.max(0, 1 - y*y));
+    var theta = goldenAngle * i;
+    points.push({ x: Math.cos(theta)*r, y: y, z: Math.sin(theta)*r,
+      digit: String(Math.floor(rng()*10)), gold: rng() < 0.28, scale: 0.8 + rng()*0.45 });
+  }
+  var rings = [
+    { tiltX: 1.08, roll: 0.45, radius: 1.13 },
+    { tiltX: 1.38, roll: -0.55, radius: 1.19 },
+    { tiltX: 0.82, roll: 1.05, radius: 1.07 }
+  ];
+  var w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+  function rotate(x, y, z, rotY, rotX){
+    var cy = Math.cos(rotY), sy = Math.sin(rotY);
+    var x1 = x*cy + z*sy, z1 = -x*sy + z*cy;
+    var cx = Math.cos(rotX), sx = Math.sin(rotX);
+    var y2 = y*cx - z1*sx, z2 = y*sx + z1*cx;
+    return [x1, y2, z2];
+  }
+  function draw(now){
+    if(w === 0 || h === 0) return;
+    ctx.clearRect(0, 0, w, h);
+    var cxp = w/2, cyp = h/2, R = Math.min(w, h) * 0.44;
+    var rotY = now * 0.00016;
+    var rotX = 0.38 + Math.sin(now * 0.00006) * 0.07;
+    rings.forEach(function(ring){
+      ctx.beginPath();
+      var steps = 90;
+      for(var s=0;s<=steps;s++){
+        var a = (s/steps) * Math.PI * 2;
+        var px = Math.cos(a) * ring.radius, py = 0, pz = Math.sin(a) * ring.radius;
+        var cxi = Math.cos(ring.tiltX), sxi = Math.sin(ring.tiltX);
+        var py1 = py*cxi - pz*sxi, pz1 = py*sxi + pz*cxi; py = py1; pz = pz1;
+        var cz = Math.cos(ring.roll), sz = Math.sin(ring.roll);
+        var px2 = px*cz - py*sz, py2 = px*sz + py*cz; px = px2; py = py2;
+        var rr = rotate(px, py, pz, rotY, rotX);
+        var sxp = cxp + rr[0]*R, syp = cyp + rr[1]*R;
+        if(s === 0) ctx.moveTo(sxp, syp); else ctx.lineTo(sxp, syp);
+      }
+      ctx.strokeStyle = "rgba(201,168,106,0.16)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+    var projected = points.map(function(p){
+      var rr = rotate(p.x, p.y, p.z, rotY, rotX);
+      return { p: p, rx: rr[0], ry: rr[1], rz: rr[2] };
+    }).sort(function(a, b){ return a.rz - b.rz; });
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    projected.forEach(function(o){
+      var depth = (o.rz + 1) / 2;
+      var alpha = 0.07 + depth * depth * 0.62;
+      var size = R * 0.085 * o.p.scale * (0.5 + depth * 0.85);
+      ctx.font = "600 " + size.toFixed(1) + 'px "Cormorant Garamond","Noto Serif SC",serif';
+      ctx.fillStyle = o.p.gold
+        ? "rgba(232,201,136," + alpha.toFixed(3) + ")"
+        : "rgba(246,240,226," + alpha.toFixed(3) + ")";
+      ctx.fillText(o.p.digit, cxp + o.rx * R, cyp + o.ry * R);
+    });
+  }
+  function resize(){
+    var rect = canvas.getBoundingClientRect();
+    w = rect.width; h = rect.height;
+    canvas.width = Math.max(1, Math.round(w * dpr));
+    canvas.height = Math.max(1, Math.round(h * dpr));
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if(reduced) draw(1400);
+  }
+  resize();
+  if(typeof ResizeObserver !== "undefined") new ResizeObserver(resize).observe(canvas);
+  if(!reduced){
+    var loop = function(now){ draw(now); requestAnimationFrame(loop); };
+    requestAnimationFrame(loop);
+  }
+})();
+
+/* ---------- Stripe return: ?paid=aspect|liunian|bundle|change ---------- */
+function openFlowDirect(){
+  gateOpened = true; gateLeaving = false;
+  $("gate").classList.add("hidden");
+  $("flow").classList.remove("hidden");
+  renderLangNav(); renderGate(); renderFlowTexts(); renderDigits(); renderYear(); syncBegin();
+}
+/* After payment Stripe lands on the site address with ?paid=... — that
+   flag can sit on this frame's own URL or, when the page is displayed
+   inside the Muse shell, on the outer page's URL. Read every place it
+   can be seen from here instead of only this frame's query string. */
+/* What the Stripe return address can carry: each payment link has ONE
+   fixed after-payment address, currently ...?paid=aspect / ?paid=liunian /
+   ?paid=bundle / ?paid=change — a fixed address cannot embed each buyer's
+   own last 4 digits or chosen aspect, so today the number and item are
+   recovered from the purchase record saved at checkout and from the
+   payment signal the return page broadcasts (see below), NOT from the
+   address. This parser ALSO accepts the data in the address itself
+   (?paid=aspect&t=8657&a=ganqing) so that if a link's address ever does
+   carry it — or the page is reached through an address that does — the
+   return needs nothing stored and no manual input. Aliases accepted:
+   t|tail|last4, a|aspect|key|item. */
+function returnFromString(raw){
+  if(!raw) return null;
+  try {
+    var q = String(raw);
+    var qi = q.indexOf("?");
+    if(qi >= 0) q = q.slice(qi + 1);
+    else if(q.charAt(0) === "#") q = q.slice(1);
+    else if(q.indexOf("paid=") < 0 && q.indexOf("paid%3D") < 0) return null;
+    var hi = q.indexOf("#");
+    if(hi >= 0) q = q.slice(0, hi);
+    var sp = new URLSearchParams(q);
+    var p = sp.get("paid");
+    if(!p) return null;
+    var t = sp.get("t") || sp.get("tail") || sp.get("last4") || "";
+    t = String(t).replace(/\D/g, "").slice(0, 4);
+    var a = sp.get("a") || sp.get("aspect") || sp.get("key") || sp.get("item") || "";
+    a = String(a).replace(/[^a-z]/g, "");
+    var known = DATA.aspects.some(function(d){ return d.key === a; });
+    return { paid: p, t: /^\d{4}$/.test(t) ? t : "", a: known ? a : "" };
+  } catch(e){}
+  return null;
+}
+function readReturnData(){
+  var sources = [];
+  try { sources.push(window.location.href || ""); } catch(e){}
+  try { sources.push(window.location.search || ""); } catch(e){}
+  try { sources.push(window.location.hash || ""); } catch(e){}
+  /* document.referrer is a plain string, readable even when this page sits
+     in a sandboxed frame whose storage and parent window are off-limits:
+     when the shell page at ...?paid=aspect&t=8657&a=ganqing loads this
+     frame, its full URL is the referrer of the frame's first request. */
+  try { sources.push(document.referrer || ""); } catch(e){}
+  try { if(window.parent && window.parent !== window) sources.push(window.parent.location.href || ""); } catch(e){}
+  try { if(window.top && window.top !== window && window.top !== window.parent) sources.push(window.top.location.href || ""); } catch(e){}
+  var bare = null;
+  for(var i = 0; i < sources.length; i++){
+    var r = returnFromString(sources[i]);
+    if(!r) continue;
+    if(r.t || r.a) return r;      /* richest source wins */
+    if(!bare) bare = r;
+  }
+  return bare;
+}
+function readPaidParam(){ var r = readReturnData(); return r ? r.paid : null; }
+function clearPaidParam(){
+  try { history.replaceState(null, "", window.location.pathname + window.location.hash); } catch(e){}
+}
+/* Apply a completed purchase: unlock it, rebuild the reading for its
+   last 4 digits and land on the bought item, highlighted and open. */
+function applyPaidUnlock(type, pending){
+  loadUnlocked();
+  var last4 = (pending && /^\d{4}$/.test(pending.last4 || "")) ? pending.last4 : "";
+  if(!last4 && unlocked && /^\d{4}$/.test(unlocked.last4 || "")) last4 = unlocked.last4;
+  if(!last4 && report) last4 = report.last4;
+  if(!last4) return false;
+  if(pending && LANGS.indexOf(pending.lang) >= 0) lang = pending.lang;
+  if(unlocked.last4 !== last4) unlocked = { last4: last4, aspects: {}, liunian: false, bundle: false };
+  if(type === "aspect" && pending && pending.key) unlocked.aspects[pending.key] = true;
+  if(type === "liunian") unlocked.liunian = true;
+  if(type === "bundle") unlocked.bundle = true;
+  saveUnlocked();
+  paidBanner = true;
+  hidePayWait();
+  digits = last4.split("");
+  year = 2027;
+  openFlowDirect();
+  report = compute(last4, 2027, lang);
+  noticeItem = null;
+  renderReport();
+  var targetId = type === "liunian" ? "card-liunian"
+    : type === "bundle" ? "card-bundle"
+    : (type === "aspect" && pending && pending.key ? "card-" + pending.key : "results");
+  scrollHighlight(targetId);
+  return true;
+}
+var paidHandled = false;
+function handlePaidReturn(){
+  if(paidHandled) return;
+  loadUnlocked();
+  var ret = readReturnData();
+  if(!ret || !ret.paid) return;
+  paidHandled = true;
+  var paid = ret.paid;
+  hidePayWait();
+  var stored = getPending();
+  if(stored && stored.type && stored.type !== paid && paid !== "change"){
+    /* Trust the return flag for the item type; keep the record's fields. */
+    stored = { type: paid, key: stored.key, last4: stored.last4, lang: stored.lang, email: stored.email };
+  }
+  /* Merge every source of the purchase data: address parameters (?t= /
+     ?a=) when present override/fill the stored purchase record. */
+  var pending = {
+    type: paid,
+    key: ret.a || (stored && stored.key) || undefined,
+    last4: ret.t || (stored && stored.last4) || "",
+    lang: (stored && stored.lang) || lang,
+    email: stored && stored.email
+  };
+  /* Broadcast the purchase to the ORIGINAL checkout tab (still open in
+     another tab) so it opens the same item by itself too. */
+  var sig = { type: paid, key: pending.key, last4: pending.last4, lang: pending.lang, ts: Date.now() };
+  writePaidSignal(sig);
+  notifyOpener(sig);
+  clearPaidParam();
+  if(paid === "aspect" || paid === "liunian" || paid === "bundle"){
+    delPending();
+    if(applyPaidUnlock(paid, pending)) return;
+    /* The return arrived but neither the address nor any store on this
+       browser knows the number (e.g. an older ?paid=-only link opened in
+       a fresh browser): never send a paying visitor back to the bare
+       gate — open the reading flow directly and explain plainly. No form,
+       no unlock granted on a bare claim. */
+    paidLostReturn = true;
+    paidLostType = paid;
+    var nav = (navigator.language || "").slice(0, 2);
+    if(LANGS.indexOf(nav) >= 0) lang = nav;
+    openFlowDirect();
+    window.setTimeout(function(){ focusDigit(0); }, 160);
+  } else if(paid === "change"){
+    delPending();
+    openFlowDirect();
+    if(pending.email) svcSubmittedEmail = pending.email;
+    svcNoticeShown = true;
+    renderService();
+    window.setTimeout(function(){ $("svcWrap").scrollIntoView({ behavior: reducedMotion() ? "auto" : "smooth", block: "start" }); }, 80);
+  }
+}
+
+/* ---------- init ---------- */
+$("gateFlame").innerHTML = flameSVG(32);
+$("flowFlame").innerHTML = flameSVG(26);
+$("loaderFlame").innerHTML = flameSVG(20);
+$("gateMotes").innerHTML = motesHTML();
+$("flowMotes").innerHTML = motesHTML();
+renderLangNav();
+renderGate();
+loadUnlocked();
+ssDel("jinum_paid_recovery_v1"); /* legacy record from the removed tap-to-unlock recovery */
+function syncUnlockFromOtherTab(){
+  var before = JSON.stringify(unlocked);
+  loadUnlocked();
+  if(report && JSON.stringify(unlocked) !== before) renderReport();
+}
+window.addEventListener("focus", syncUnlockFromOtherTab);
+window.addEventListener("storage", syncUnlockFromOtherTab);
+handlePaidReturn();
+/* The shell around this frame can hand the ?paid= flag over a moment after
+   first paint; retry the return check a few times and whenever the visitor
+   comes back to this tab. When this tab is the ORIGINAL checkout tab, flash
+   the payment panel instead, so one tap on it opens the bought reading. */
+[700, 1800, 3500, 7000].forEach(function(ms){ window.setTimeout(handlePaidReturn, ms); });
+window.addEventListener("focus", handlePaidReturn);
+document.addEventListener("visibilitychange", function(){ if(!document.hidden) handlePaidReturn(); });
+window.addEventListener("focus", function(){
+  var pw = $("payWait");
+  if(pw && !pw.classList.contains("hidden") && pendingMem){
+    pw.classList.remove("flash");
+    void pw.offsetWidth;
+    pw.classList.add("flash");
+  }
+});
+</script>
+</body>
+</html>
