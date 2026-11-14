@@ -150,6 +150,7 @@
     border-radius:8px; padding:8px; text-align:center; font-size:16px; font-weight:900; line-height:1.3; color:#f5efe3; background:var(--seal);
     box-shadow:0 8px 20px rgba(0,0,0,.45), inset 0 0 0 1.5px rgba(246,240,226,.22), inset 0 0 14px rgba(0,0,0,.25)}
   .seal-badge.bad{background:#6e4a2f}
+  @media(max-width:639px){.verdict-flex{flex-direction:column; gap:10px}.seal-badge{min-height:0; min-width:0; padding:6px 14px; font-size:14px; align-self:flex-start}}
   .verdict-kicker{font-size:12px; letter-spacing:.15em; color:var(--faint); margin:0}
   .verdict-phrase{margin:4px 0 0; font-size:24px; font-weight:700; line-height:1.4}
   .verdict-summary{margin:8px 0 0; font-size:14px; line-height:1.75; color:var(--dim)}
@@ -864,9 +865,11 @@ function compute(last4, lang){
     return { key: def.key, name: pack.aspectName[def.key], brief: brief };
   });
   var copy = copyFor(lang, idx);
+  var repTail = copy && copy.tail;
+  function subTail(text){ if(!text || !repTail || repTail === last4) return text; return String(text).split(repTail).join(last4); }
   var aspects2 = aspects.map(function(a){
     var det = (copy && copy.aspects && copy.aspects[a.key]) || [];
-    return { key: a.key, name: a.name, brief: a.brief, detail: det };
+    return { key: a.key, name: a.name, brief: a.brief, detail: det.map(subTail) };
   });
   return {
     last4: last4,
@@ -875,8 +878,8 @@ function compute(last4, lang){
     verdictBad: band === "bad",
     band: band,
     verdictPhrase: pack.table[idx],
-    freeText: copy ? ((copy.free && copy.free[0]) || "") : "",
-    closingText: copy ? (copy.closing || "") : "",
+    freeText: copy ? subTail((copy.free && copy.free[0]) || "") : "",
+    closingText: copy ? subTail(copy.closing || "") : "",
     aspects: aspects2
   };
 }
